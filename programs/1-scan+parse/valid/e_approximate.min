@@ -12,7 +12,8 @@ var fact: float = 1.0;
 var threshold: float = 0.001;
 var is_done: bool = False;
 
-while (!is_done) {
+var change: float = 0.0;
+while (is_done != True) {
 
     last = sum;
     sum = sum + 1 / fact;
@@ -20,7 +21,7 @@ while (!is_done) {
     n = n + 1;
     fact = fact * n;
 
-    var change: float = sum - last;
+    change = sum - last;
     if (change <= threshold) {
         is_done = True;
     }
@@ -30,4 +31,3 @@ print(sum);
 print(". Computed after ");
 print(n);
 print(" iterations.");
-

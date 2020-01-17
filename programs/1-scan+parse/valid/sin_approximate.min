@@ -37,4 +37,3 @@ while (sum - last <= threshold) {
 
 print("Approximation: ")
 print(sum)
-
