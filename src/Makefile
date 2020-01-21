@@ -1,19 +1,25 @@
 CC = gcc
 CFLAGS = -Wall -lfl
 
-main: lex.yy
-	$(CC) -o minic lex.yy.c $(CFLAGS)
+minic: lex.yy.c minic.tab.c minic.tab.h main.o
+	$(CC) -o minic minic.tab.c lex.yy.c main.o $(CFLAGS)
 
-lex.yy:
-	flex minic.l
+lex.yy.c: minic.l minic.tab.h
+	flex --header-file=lex.yy.h minic.l
+
+minic.tab.c minic.tab.h: minic.y
+	bison -d --verbose -t minic.y
+
+test_lex: minic
+	echo "1.00+200" | ./minic && echo ""
+	echo "(a_*_b/_c__)==5" | ./minic && echo ""
+	echo "True&&False!=3#hello" | ./minic && echo ""
+	echo '"!#^*\\n./{};><?"' | ./minic && echo ""
+	echo "var a: float = 0.0;" | ./minic && echo ""
+	echo "0123" | ./minic && echo ""
+	echo "\"True\"" | ./minic && echo ""
+	echo "True" | ./minic && echo ""
+	echo "^" | ./minic && echo ""
 
 clean:
-	rm lex.yy.*
-
-test: main
-	echo "1.0+200" | ./minic
-	echo "(a_*_b/c__)==5" | ./minic
-	echo "True&&False!=3#hello" | ./minic
-	echo '"!#^*\\n./{};><?"' | ./minic
-	echo "var a: float = 0.0;" | ./minic
-	echo "0HelLo" | ./minic
+	rm minic minic.tab.c lex.yy.c minic.tab.h
