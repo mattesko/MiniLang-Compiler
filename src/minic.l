@@ -25,15 +25,15 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 
 "+"         if (print_token) {printf("PLUS\n");} return '+';
 "-"         if (print_token) {printf("MINUS\n");} return '-';
-"=="        if (print_token) {printf("COMPARE\n");} return '==';
+"=="        if (print_token) {printf("COMPARE\n");} return COMPARE;
 "="         if (print_token) {printf("ASSIGN\n");} return '=';
-"!="        if (print_token) {printf("NEGATE_COMPARE\n");} return '!=';
-">="        if (print_token) {printf("GTE\n");} return '>=';
-"<="        if (print_token) {printf("STE\n");} return '<=';
-">"         if (print_token) {printf("GT\n");} return '>';
-"<"         if (print_token) {printf("ST\n");} return '<';
-"&&"        if (print_token) {printf("LOGIC_AND\n");} return '&&';
-"||"        if (print_token) {printf("LOGIC_OR\n");} return '||';
+"!="        if (print_token) {printf("NOT_COMPARE\n");} return NOT_COMPARE;
+">="        if (print_token) {printf("GTE\n");} return GTE;
+"<="        if (print_token) {printf("STE\n");} return STE;
+">"         if (print_token) {printf("GT\n");} return GT;
+"<"         if (print_token) {printf("ST\n");} return ST;
+"&&"        if (print_token) {printf("LOGIC_AND\n");} return LOGIC_AND;
+"||"        if (print_token) {printf("LOGIC_OR\n");} return LOGIC_OR;
 "*"         if (print_token) {printf("ASTERISK\n");} return '*';
 "/"         if (print_token) {printf("SLASH\n");} return '/';
 

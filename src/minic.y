@@ -27,6 +27,7 @@ void yyerror(const char *s);
 }
 
 %token VAR FLOAT INT BOOL STRING PRINT WHILE IF ELSE READ
+%token GT GTE ST STE COMPARE LOGIC_AND LOGIC_OR NOT_COMPARE
 
 %token <bool_val> BOOL_VAL
 %token <string_val> STRING_VAL
@@ -35,6 +36,10 @@ void yyerror(const char *s);
 %token <identifier> IDENTIFIER
 
 // Precedence directives
+%left LOGIC_OR
+%left LOGIC_AND
+%left COMPARE NOT_COMPARE
+%left GTE STE GT ST
 %left '+' '-'
 %left '*' '/'
 // %nonassoc '{' '}' '(' ')'
