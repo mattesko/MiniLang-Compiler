@@ -1,0 +1,6 @@
+src/flex-2.6.4/
+src/*.output
+src/*.tab.c
+src/*.yy.c
+*.bak
+.vscode
