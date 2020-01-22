@@ -1,0 +1,2 @@
+# Erro type: Parser. read should only take identifier as input
+read(2+2);

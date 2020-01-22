@@ -1,0 +1,6 @@
+# Error type: Parser. Nest an unexpected else
+if (True) {
+    else {
+        print("bad");
+    }
+}

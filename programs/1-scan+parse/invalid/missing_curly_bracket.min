@@ -1,0 +1,4 @@
+# Error Type: Parser. Conditional statement scope missing curly bracket
+
+if (True == True) {
+    print("True");

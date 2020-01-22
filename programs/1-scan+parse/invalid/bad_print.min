@@ -1,0 +1,3 @@
+# Error type: Parser. Lexically correct, however print needs pair of parantheses
+
+print "2";

@@ -1,0 +1,2 @@
+# Error type: Parser. Two '-' operators shouldn't be grammatically correct
+--5 + 5;

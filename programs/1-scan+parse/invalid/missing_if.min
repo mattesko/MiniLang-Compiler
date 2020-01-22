@@ -1,0 +1,4 @@
+# Error type: Parser. Missing the 'if' keyword for a conditional statement
+(5 == 5) {
+    print("True");
+}

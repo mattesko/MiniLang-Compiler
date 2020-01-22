@@ -1,0 +1,4 @@
+# Error Type: Parser
+# Slash is lexically correct, but can't have two slashes one after another
+
+// i goofed

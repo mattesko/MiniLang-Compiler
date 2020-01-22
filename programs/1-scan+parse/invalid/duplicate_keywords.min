@@ -1,0 +1,2 @@
+# Error type: Parser. Duplicate datatype keyword during assignment
+var a int int = 1;

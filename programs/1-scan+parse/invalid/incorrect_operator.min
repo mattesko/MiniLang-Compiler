@@ -1,0 +1,2 @@
+# Error type: Parser. Use == instead of = for assignment
+var a: float == 0.0;

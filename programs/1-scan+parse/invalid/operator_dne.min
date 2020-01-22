@@ -1,0 +1,6 @@
+# Error Type: Parser. '=' and '>' are lexically correct but can't be used like so '=>'
+
+var a: int = 5;
+if (a => 4) {
+    print("that's interesting");
+}

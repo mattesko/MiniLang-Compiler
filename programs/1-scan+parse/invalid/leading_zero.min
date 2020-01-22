@@ -1,0 +1,2 @@
+# Error type: Scanner. Leading 0 leads to undefined token
+00 + 1;

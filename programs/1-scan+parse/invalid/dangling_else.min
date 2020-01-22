@@ -1,0 +1,3 @@
+# Error type: Parser. An else statement without paired if statement
+else {
+}
