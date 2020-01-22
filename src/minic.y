@@ -41,7 +41,10 @@ void yyerror(const char *s);
 %left GTE STE GT ST
 %left '+' '-'
 %left '*' '/'
-// %nonassoc '{' '}' '(' ')'
+%left '!'
+
+%nonassoc '{' '}' '(' ')'
+%nonassoc ELSE
 
 %start program
 
@@ -73,6 +76,7 @@ exp:  exp '+' exp
     | exp '/' exp
     | '(' exp ')'
     | '-' exp
+    | '!' exp
     | exp COMPARE exp
     | exp NOT_COMPARE exp
     | exp GT exp

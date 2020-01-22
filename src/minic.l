@@ -34,6 +34,7 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 "<"         if (print_token) {printf("ST\n");} return ST;
 "&&"        if (print_token) {printf("LOGIC_AND\n");} return LOGIC_AND;
 "||"        if (print_token) {printf("LOGIC_OR\n");} return LOGIC_OR;
+"!"			if (print_token) {printf("EXCLAMATION_POINT\n");} return '!';
 "*"         if (print_token) {printf("ASTERISK\n");} return '*';
 "/"         if (print_token) {printf("SLASH\n");} return '/';
 
