@@ -35,5 +35,5 @@ while (sum - last <= threshold) {
     pow_result = angle;
 }
 
-print("Approximation: ")
-print(sum)
+print("Approximation: ");
+print(sum);
