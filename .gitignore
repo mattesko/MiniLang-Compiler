@@ -5,5 +5,6 @@ src/*.yy.c
 src/*.yy.h
 src/*.o
 src/minic
+src/minic.tab.h
 *.bak
 .vscode
