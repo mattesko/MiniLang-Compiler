@@ -10,4 +10,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run valid and invalid program scanner and parser tests
-      run: ./test.sh
+      run: ./build.sh && ./test.sh
