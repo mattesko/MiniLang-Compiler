@@ -1,8 +1,6 @@
-# Assignment Template
-
-To organize your assignments and project for class, please follow the skeleton provided in this repository
-
-We provide 3 scripts for convenience and two directories for organization:
+# Compiler Design
+## Assignment 1: Scanner+Parser
+References used: https://github.com/meyerd/flex-bison-example (for more lexing and parsing examples), https://github.com/comp520/Examples/tree/master/flex%2Bbison/scanner%2Bparser, and the bison and flex man pages.
 
 * `programs`: Test programs are organized by compilation phase and by expected result. Valid programs should output `OK` and status code `0`, while invalid programs should output `Error: <description>` and status code `1`.
   * `Scan+parse`: Runs both the scanner and parser phases
