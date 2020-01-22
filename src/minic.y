@@ -23,7 +23,6 @@ void yyerror(const char *s);
     char *string_val;
     float float_val;
     unsigned short int bool_val;
-    char *identifier;
 }
 
 %token VAR FLOAT INT BOOL STRING PRINT WHILE IF ELSE READ
@@ -33,7 +32,7 @@ void yyerror(const char *s);
 %token <string_val> STRING_VAL
 %token <int_val> INT_VAL
 %token <float_val> FLOAT_VAL
-%token <identifier> IDENTIFIER
+%token <string_val> IDENTIFIER
 
 // Top = Lowest Precedence. Bottom = Highest Precedence
 %left LOGIC_OR

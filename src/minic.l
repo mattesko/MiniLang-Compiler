@@ -86,7 +86,7 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 
 (_|[A-z])[A-z0-9_]* {
 	    if (print_token) {printf("IDENTIFIER: %s\n", yytext);}
-		yylval.identifier = strdup(yytext);
+		yylval.string_val = strdup(yytext);
 		return IDENTIFIER;
 }
 
