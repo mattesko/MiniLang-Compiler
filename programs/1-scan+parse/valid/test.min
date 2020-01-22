@@ -1,0 +1,17 @@
+var a1: int = 1;
+
+print(a);
+var _A2_s_40m_: float = 0.5;
+read(a);
+if (!True && (1 == 2 || False != !True && 4 < 3) || 1 < 2) {
+    print(-"print");
+    if (!True != False) {
+        var a2: int = 1;
+    }
+    else {
+        var a2: int = 1;
+    }
+}
+else if (1 > !"str") {
+    read(a1);
+}
