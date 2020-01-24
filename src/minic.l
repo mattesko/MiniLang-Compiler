@@ -57,7 +57,7 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 "read"		if (print_token) {printf("READ\n");} return READ;
 
 "True"|"False" {
-		if (print_token) {printf("BOOL_VAL\n");}
+		if (print_token) {printf("BOOL_VAL: %s\n", yytext);}
 		if (strcmp("True", yytext) == 0) {yylval.bool_val = 0;}
 		else {yylval.bool_val = 1;}
 		return BOOL_VAL;
@@ -85,13 +85,13 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 		return FLOAT_VAL;
 }
 
-(_|[A-z])[A-z0-9_]* {
+(_|[A-Za-z])[A-Za-z0-9_]* {
 	    if (print_token) {printf("IDENTIFIER: %s\n", yytext);}
 		yylval.string_val = strdup(yytext);
 		return IDENTIFIER;
 }
 
 . { 
-		fprintf (stderr, "Error: (line %d) unexpected character '%s'\n", yylineno, yytext); exit(1); 
+		fprintf (stderr, "Error: lexical error (line %d) unexpected character '%s'\n", yylineno, yytext); exit(1); 
 }
 %%
