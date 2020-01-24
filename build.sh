@@ -4,5 +4,7 @@
 #
 # You MUST replace the following commands with the commands for building your compiler
 
-make clean -C ./src
+if [ -f "src/minic" ]; then
+    make clean -C ./src
+fi
 make minic -C ./src
