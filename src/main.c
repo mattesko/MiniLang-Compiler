@@ -2,8 +2,8 @@
 #include <string.h>
 
 extern int print_token;
-extern yylex();
-extern yyparse();
+extern int yylex();
+extern int yyparse();
 
 void run_mode(char *mode);
 char* parse_args(int argc, char *argv[]);
@@ -11,7 +11,7 @@ char* parse_args(int argc, char *argv[]);
 int main(int argc, char *argv[]) {
 
     char *mode = parse_args(argc, argv);
-    void run_mode(mode);
+    run_mode(mode);
     return 0;
 }
 
