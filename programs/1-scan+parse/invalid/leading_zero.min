@@ -1,2 +1,2 @@
-# Error type: Scanner. Leading 0 leads to undefined token
+# Error type: Parser. Leading 0 results in two INT literals
 00 + 1;
