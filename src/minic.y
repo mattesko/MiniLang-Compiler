@@ -52,7 +52,7 @@ void yyerror(const char *s);
 %define parse.error verbose
 
 %%
-program: stmt stmt_list;
+program: stmt_list;
 
 stmt_list:
     | stmt stmt_list
@@ -61,13 +61,15 @@ stmt_list:
 stmt: READ '(' IDENTIFIER ')' ';'
     | PRINT '(' exp ')' ';'
     | IDENTIFIER '=' exp ';'
-    | IF '(' exp ')' '{' stmt_list '}'
-    | IF '(' exp ')' '{' stmt_list '}' ELSE '{' stmt_list '}'
-    | IF '(' exp ')' '{' stmt_list '}' ELSE IF '(' exp ')' '{' stmt_list '}'
-    | IF '(' exp ')' '{' stmt_list '}' ELSE IF '(' exp ')' '{' stmt_list '}' ELSE '{' stmt_list '}'
     | WHILE '(' exp ')' '{' stmt_list '}'
     | VAR IDENTIFIER ':' type '=' exp ';'
     | VAR IDENTIFIER '=' exp ';'
+    | if_stmt
+    ;
+
+if_stmt: IF '(' exp ')' '{' stmt_list '}'
+    | IF '(' exp ')' '{' stmt_list '}' ELSE '{' stmt_list '}'
+    | IF '(' exp ')' '{' stmt_list '}' ELSE if_stmt
     ;
 
 exp:  exp '+' exp

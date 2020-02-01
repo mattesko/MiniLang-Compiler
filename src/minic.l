@@ -62,7 +62,7 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 		return BOOL_VAL;
 }
 
-\".*\" {
+\"[^"¿]*\" {
 		if (print_token) {printf("STRING_VAL: %s\n", yytext);}
 		yylval.string_val = strdup(yytext);
 		return STRING_VAL;
