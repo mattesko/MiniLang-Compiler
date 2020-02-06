@@ -25,26 +25,26 @@ void yyerror(const char *s);
     unsigned short int bool_val;
 }
 
-%token VAR FLOAT INT BOOL STRING PRINT WHILE IF ELSE READ
-%token GT GTE ST STE COMPARE LOGIC_AND LOGIC_OR NOT_COMPARE
+%token tVAR tFLOAT tINT tBOOL tSTRING tPRINT tWHILE tIF tELSE tREAD
+%token tGT tGTE tST tSTE tEQUAL tLOGIC_AND tLOGIC_OR tNEQUAL
 
-%token <bool_val> BOOL_VAL
-%token <string_val> STRING_VAL
-%token <int_val> INT_VAL
-%token <float_val> FLOAT_VAL
-%token <string_val> IDENTIFIER
+%token <bool_val> tBOOL_LITERAL
+%token <string_val> tSTRING_LITERAL
+%token <int_val> tINT_LITERAL
+%token <float_val> tFLOAT_LITERAL
+%token <string_val> tIDENTIFIER
 
 // Top = Lowest Precedence. Bottom = Highest Precedence
-%left LOGIC_OR
-%left LOGIC_AND
-%left COMPARE NOT_COMPARE
-%left GTE STE GT ST
+%left tLOGIC_OR
+%left tLOGIC_AND
+%left tEQUAL tNEQUAL
+%left tGTE tSTE tGT tST
 %left '+' '-'
 %left '*' '/'
 %left '!'
 
 %nonassoc '{' '}' '(' ')'
-%nonassoc ELSE
+%nonassoc tELSE
 
 %start program
 
@@ -58,45 +58,38 @@ stmt_list:
     | stmt stmt_list
     ;
 
-stmt: READ '(' IDENTIFIER ')' ';'
-    | PRINT '(' exp ')' ';'
-    | IDENTIFIER '=' exp ';'
-    | WHILE '(' exp ')' '{' stmt_list '}'
-    | VAR IDENTIFIER ':' type '=' exp ';'
-    | VAR IDENTIFIER '=' exp ';'
+stmt: tREAD '(' tIDENTIFIER ')' ';'
+    | tPRINT '(' exp ')' ';'
+    | tIDENTIFIER '=' exp ';'
+    | tWHILE '(' exp ')' '{' stmt_list '}'
+    | tVAR tIDENTIFIER ':' type '=' exp ';'
+    | tVAR tIDENTIFIER '=' exp ';'
     | if_stmt
     ;
 
-if_stmt: IF '(' exp ')' '{' stmt_list '}'
-    | IF '(' exp ')' '{' stmt_list '}' ELSE '{' stmt_list '}'
-    | IF '(' exp ')' '{' stmt_list '}' ELSE if_stmt
+if_stmt: tIF '(' exp ')' '{' stmt_list '}'
+    | tIF '(' exp ')' '{' stmt_list '}' tELSE '{' stmt_list '}'
+    | tIF '(' exp ')' '{' stmt_list '}' tELSE if_stmt
     ;
 
-exp:  exp '+' exp
-    | exp '-' exp
-    | exp '*' exp
-    | exp '/' exp
-    | '(' exp ')'
-    | '-' exp
-    | '!' exp
-    | exp COMPARE exp
-    | exp NOT_COMPARE exp
-    | exp GT exp
-    | exp GTE exp
-    | exp ST exp
-    | exp STE exp
-    | exp LOGIC_OR exp
-    | exp LOGIC_AND exp
-    | IDENTIFIER
-    | BOOL_VAL
-    | STRING_VAL
-    | INT_VAL
-    | FLOAT_VAL
+    | exp tEQUAL exp
+    | exp tNEQUAL exp
+    | exp tGT exp
+    | exp tGTE exp
+    | exp tST exp
+    | exp tSTE exp
+    | exp tLOGIC_OR exp
+    | exp tLOGIC_AND exp
+    | tIDENTIFIER
+    | tBOOL_LITERAL
+    | tSTRING_LITERAL
+    | tINT_LITERAL
+    | tFLOAT_LITERAL
     ;
 
-type: BOOL
-    | STRING
-    | INT
-    | FLOAT
+type: tBOOL
+    | tSTRING
+    | tINT
+    | tFLOAT
     ;
 %%

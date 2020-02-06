@@ -23,49 +23,49 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 [ \t]+      if (print_token) {printf("WHITESPACE, length %u\n", yyleng);}
 
 "+"         if (print_token) {printf("PLUS\n");} return '+';
-"-"         if (print_token) {printf("MINUS\n");} return '-';
-"=="        if (print_token) {printf("COMPARE\n");} return COMPARE;
-"="         if (print_token) {printf("ASSIGN\n");} return '=';
-"!="        if (print_token) {printf("NOT_COMPARE\n");} return NOT_COMPARE;
-">="        if (print_token) {printf("GTE\n");} return GTE;
-"<="        if (print_token) {printf("STE\n");} return STE;
-">"         if (print_token) {printf("GT\n");} return GT;
-"<"         if (print_token) {printf("ST\n");} return ST;
-"&&"        if (print_token) {printf("LOGIC_AND\n");} return LOGIC_AND;
-"||"        if (print_token) {printf("LOGIC_OR\n");} return LOGIC_OR;
-"!"			if (print_token) {printf("EXCLAMATION_POINT\n");} return '!';
-"*"         if (print_token) {printf("ASTERISK\n");} return '*';
-"/"         if (print_token) {printf("SLASH\n");} return '/';
+"-"         if (print_token) {printf("tMINUS\n");} return '-';
+"=="        if (print_token) {printf("tEQUAL\n");} return tEQUAL;
+"="         if (print_token) {printf("tASSIGN\n");} return '=';
+"!="        if (print_token) {printf("tNEQUAL\n");} return tNEQUAL;
+">="        if (print_token) {printf("tGTE\n");} return tGTE;
+"<="        if (print_token) {printf("tSTE\n");} return tSTE;
+">"         if (print_token) {printf("tGT\n");} return tGT;
+"<"         if (print_token) {printf("tST\n");} return tST;
+"&&"        if (print_token) {printf("tLOGIC_AND\n");} return tLOGIC_AND;
+"||"        if (print_token) {printf("tLOGIC_OR\n");} return tLOGIC_OR;
+"!"			if (print_token) {printf("tEXCLAMATION_POINT\n");} return '!';
+"*"         if (print_token) {printf("tASTERISK\n");} return '*';
+"/"         if (print_token) {printf("tSLASH\n");} return '/';
 
-"("         if (print_token) {printf("OPEN_PAR\n");} return '(';
-")"         if (print_token) {printf("CLOSE_PAR\n");} return ')';
-"{"			if (print_token) {printf("OPEN_BRACE\n");} return '{';
-"}"			if (print_token) {printf("CLOSE_BRACE\n");} return '}';
-";"         if (print_token) {printf("SEMICOLON\n");} return ';';
-":"         if (print_token) {printf("COLON\n");} return ':';
+"("         if (print_token) {printf("tOPEN_PAR\n");} return '(';
+")"         if (print_token) {printf("tCLOSE_PAR\n");} return ')';
+"{"			if (print_token) {printf("tOPEN_BRACE\n");} return '{';
+"}"			if (print_token) {printf("tCLOSE_BRACE\n");} return '}';
+";"         if (print_token) {printf("tSEMICOLON\n");} return ';';
+":"         if (print_token) {printf("tCOLON\n");} return ':';
 
-"var"		if (print_token) {printf("VAR\n");} return VAR;
-"float"		if (print_token) {printf("FLOAT\n");} return FLOAT;
-"int"		if (print_token) {printf("INT\n");} return INT;
-"bool"		if (print_token) {printf("BOOL\n");} return BOOL;
-"string"	if (print_token) {printf("STRING\n");} return STRING;
-"print"		if (print_token) {printf("PRINT\n");} return PRINT;
-"while"		if (print_token) {printf("WHILE\n");} return WHILE;
-"if"		if (print_token) {printf("IF\n");} return IF;
-"else"		if (print_token) {printf("ELSE\n");} return ELSE;
-"read"		if (print_token) {printf("READ\n");} return READ;
+"var"		if (print_token) {printf("tVAR\n");} return tVAR;
+"float"		if (print_token) {printf("tFLOAT\n");} return tFLOAT;
+"int"		if (print_token) {printf("tINT\n");} return tINT;
+"bool"		if (print_token) {printf("tBOOL\n");} return tBOOL;
+"string"	if (print_token) {printf("tSTRING\n");} return tSTRING;
+"print"		if (print_token) {printf("tPRINT\n");} return tPRINT;
+"while"		if (print_token) {printf("tWHILE\n");} return tWHILE;
+"if"		if (print_token) {printf("tIF\n");} return tIF;
+"else"		if (print_token) {printf("tELSE\n");} return tELSE;
+"read"		if (print_token) {printf("tREAD\n");} return tREAD;
 
 "True"|"False" {
-		if (print_token) {printf("BOOL_VAL: %s\n", yytext);}
+		if (print_token) {printf("tBOOL_LITERAL: %s\n", yytext);}
 		if (strcmp("True", yytext) == 0) {yylval.bool_val = 0;}
 		else {yylval.bool_val = 1;}
-		return BOOL_VAL;
+		return tBOOL_LITERAL;
 }
 
 \"[^"¿]*\" {
-		if (print_token) {printf("STRING_VAL: %s\n", yytext);}
+		if (print_token) {printf("tSTRING_LITERAL: %s\n", yytext);}
 		yylval.string_val = strdup(yytext);
-		return STRING_VAL;
+		return tSTRING_LITERAL;
 }
 
 #.* {
@@ -73,21 +73,21 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 }
 
 0|([1-9]{DIGIT}*) {
-	    if (print_token) {printf("INT_VAL: %s\n", yytext);}
+	    if (print_token) {printf("tINT_LITERAL: %s\n", yytext);}
 		yylval.int_val = atoi(yytext);
-		return INT_VAL;
+		return tINT_LITERAL;
 }
 
 (([1-9]{DIGIT}*)|0)\.{DIGIT}+ {
-	    if (print_token) {printf("FLOAT_VAL: %s\n", yytext);}
+	    if (print_token) {printf("tFLOAT_LITERAL: %s\n", yytext);}
 		yylval.float_val = atof(yytext);
-		return FLOAT_VAL;
+		return tFLOAT_LITERAL;
 }
 
 (_|[A-Za-z])[A-Za-z0-9_]* {
-	    if (print_token) {printf("IDENTIFIER: %s\n", yytext);}
+	    if (print_token) {printf("tIDENTIFIER: %s\n", yytext);}
 		yylval.string_val = strdup(yytext);
-		return IDENTIFIER;
+		return tIDENTIFIER;
 }
 
 . { 
