@@ -3,7 +3,10 @@
 // #include "lex.yy.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include "tree.h"
 
+extern STMT_LIST *root;
 extern int yylex();
 extern int yylineno;
 
@@ -18,12 +21,29 @@ void yyerror(const char *s) {
 void yyerror(const char *s);
 %}
 
+%code requires {
+	#include "tree.h"
+}
+
 %union {
     int int_val;
     char *string_val;
     float float_val;
-    unsigned short int bool_val;
+    bool bool_val;
+    struct PROGRAM *program;
+    struct EXP *exp;
+    struct STMT_LIST *stmt_list;
+    struct STMT *stmt;
+    struct TYPE *type;
+    struct CTRL_FLOW *ctrl_flow;
 }
+
+%type <exp> exp
+%type <stmt_list> stmt_list
+%type <program> program
+%type <stmt> stmt
+%type <ctrl_flow> if_stmt
+%type <type> type
 
 %token tVAR tFLOAT tINT tBOOL tSTRING tPRINT tWHILE tIF tELSE tREAD
 %token tGT tGTE tST tSTE tEQUAL tLOGIC_AND tLOGIC_OR tNEQUAL
@@ -52,44 +72,52 @@ void yyerror(const char *s);
 %define parse.error verbose
 
 %%
-program: stmt_list;
-
-stmt_list:
-    | stmt stmt_list
+program: stmt_list  {$$ = makePROGRAM($1);}
     ;
 
-stmt: tREAD '(' tIDENTIFIER ')' ';'
-    | tPRINT '(' exp ')' ';'
-    | tIDENTIFIER '=' exp ';'
-    | tWHILE '(' exp ')' '{' stmt_list '}'
-    | tVAR tIDENTIFIER ':' type '=' exp ';'
-    | tVAR tIDENTIFIER '=' exp ';'
-    | if_stmt
+stmt_list:              {$$ = NULL;}
+    | stmt stmt_list    {$$ = makeSTMT_LIST($1, $2);}
     ;
 
-if_stmt: tIF '(' exp ')' '{' stmt_list '}'
-    | tIF '(' exp ')' '{' stmt_list '}' tELSE '{' stmt_list '}'
-    | tIF '(' exp ')' '{' stmt_list '}' tELSE if_stmt
+stmt: tREAD '(' tIDENTIFIER ')' ';'         {$$ = makeSTMT_read($3);}
+    | tPRINT '(' exp ')' ';'                {$$ = makeSTMT_print($3);}
+    | tIDENTIFIER '=' exp ';'               {$$ = makeSTMT_assignment($1, $3);}
+    | tWHILE '(' exp ')' '{' stmt_list '}'  {$$ = makeCTRL_FLOW_while($3, $6);}
+    | tVAR tIDENTIFIER ':' type '=' exp ';' {$$ = makeSTMT_initStrictType($2, $4, $6);}
+    | tVAR tIDENTIFIER '=' exp ';'          {$$ = makeSTMT_initLooseType($2, $4);}
+    | if_stmt                               {$$ = $1;}
     ;
 
-    | exp tEQUAL exp
-    | exp tNEQUAL exp
-    | exp tGT exp
-    | exp tGTE exp
-    | exp tST exp
-    | exp tSTE exp
-    | exp tLOGIC_OR exp
-    | exp tLOGIC_AND exp
-    | tIDENTIFIER
-    | tBOOL_LITERAL
-    | tSTRING_LITERAL
-    | tINT_LITERAL
-    | tFLOAT_LITERAL
+if_stmt: tIF '(' exp ')' '{' stmt_list '}' {$$ = makeCTRL_FLOW_if($3, $6);}
+    | tIF '(' exp ')' '{' stmt_list '}' tELSE '{' stmt_list '}'  {$$ = makeCTRL_FLOW_ifElse($3, $6, $10);}
+    | tIF '(' exp ')' '{' stmt_list '}' tELSE if_stmt {$$ = makeCTRL_FLOW_ifElseIf($3, $6, $9);}
     ;
 
-type: tBOOL
-    | tSTRING
-    | tINT
-    | tFLOAT
+exp:  exp '+' exp           {$$ = makeEXP_binary(k_addition, $1, $3);}
+    | exp '-' exp           {$$ = makeEXP_binary(k_subtraction, $1, $3);}
+    | exp '*' exp           {$$ = makeEXP_binary(k_multiplication, $1, $3);}
+    | exp '/' exp           {$$ = makeEXP_binary(k_division, $1, $3);}
+    | '(' exp ')'           {$$ = $2;}
+    | '-' exp               {$$ = makeEXP_unary(k_unaryMinus, $2);}
+    | '!' exp               {$$ = makeEXP_unary(k_unaryLogicNot, $2);}
+    | exp tEQUAL exp        {$$ = makeEXP_binary(k_equal, $1, $3);}
+    | exp tNEQUAL exp       {$$ = makeEXP_binary(k_notEqual, $1, $3);}
+    | exp tGT exp           {$$ = makeEXP_binary(k_GT, $1, $3);}
+    | exp tGTE exp          {$$ = makeEXP_binary(k_GTE, $1, $3);}
+    | exp tST exp           {$$ = makeEXP_binary(k_ST, $1, $3);}
+    | exp tSTE exp          {$$ = makeEXP_binary(k_STE, $1, $3);}
+    | exp tLOGIC_OR exp     {$$ = makeEXP_binary(k_logicOr, $1, $3);}
+    | exp tLOGIC_AND exp    {$$ = makeEXP_binary(k_logicAnd, $1, $3);}
+    | tIDENTIFIER           {$$ = makeEXP_identifier($1);}
+    | tBOOL_LITERAL         {$$ = makeEXP_boolLiteral($1);}
+    | tSTRING_LITERAL       {$$ = makeEXP_stringLiteral($1);}
+    | tINT_LITERAL          {$$ = makeEXP_intLiteral($1);}
+    | tFLOAT_LITERAL        {$$ = makeEXP_floatLiteral($1);}
+    ;
+
+type: tBOOL     {$$ = makeTYPE(k_bool);}
+    | tSTRING   {$$ = makeTYPE(k_string);}
+    | tINT      {$$ = makeTYPE(k_int);}
+    | tFLOAT    {$$ = makeTYPE(k_float);}
     ;
 %%

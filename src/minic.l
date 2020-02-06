@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 int print_token = 0;
 %}
@@ -57,8 +58,8 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 
 "True"|"False" {
 		if (print_token) {printf("tBOOL_LITERAL: %s\n", yytext);}
-		if (strcmp("True", yytext) == 0) {yylval.bool_val = 0;}
-		else {yylval.bool_val = 1;}
+		if (strcmp("True", yytext) == 0) {yylval.bool_val = true;}
+		else {yylval.bool_val = false;}
 		return tBOOL_LITERAL;
 }
 
