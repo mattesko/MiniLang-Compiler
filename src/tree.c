@@ -171,6 +171,15 @@ EXP *makeEXP_unary(ExpressionKind kind, EXP *unary)
     return e;
 }
 
+STMT *makeSTMT_ifStmt(IFSTMT *ifStmt)
+{
+    STMT *s = malloc(sizeof(STMT));
+    s->lineno = yylineno;
+    s->kind = k_statementKind_ifStmt;
+    s->val.ifStmt = ifStmt;
+    return s;
+}
+
 IFSTMT *makeIFSTMT_if(EXP *exp, STMT_LIST *ifPart) 
 {
     IFSTMT *c = malloc(sizeof(IFSTMT));
@@ -192,14 +201,14 @@ IFSTMT *makeIFSTMT_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart)
     return c;
 }
 
-IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *elsePart)
+IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *ifStmt)
 {
     IFSTMT *c = malloc(sizeof(IFSTMT));
     c->lineno = yylineno;
     c->kind = k_ifStatementKind_ifElseIf;
     c->val.ifElseIf.exp = exp;
     c->val.ifElseIf.ifPart = ifPart;
-    c->val.ifElseIf.elsePart = elsePart;
+    c->val.ifElseIf.ifStmt = ifStmt;
     return c;
 }
 

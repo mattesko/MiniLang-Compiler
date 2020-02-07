@@ -87,7 +87,7 @@ stmt: tREAD '(' tIDENTIFIER ')' ';'         {$$ = makeSTMT_read($3);}
     | tWHILE '(' exp ')' '{' stmt_list '}'  {$$ = makeSTMT_whileLoop($3, $6);}
     | tVAR tIDENTIFIER ':' type '=' exp ';' {$$ = makeSTMT_initStrictType($2, $4, $6);}
     | tVAR tIDENTIFIER '=' exp ';'          {$$ = makeSTMT_initLooseType($2, $4);}
-    | if_stmt                               {$$ = $1;}
+    | if_stmt                               {$$ = makeSTMT_ifStmt($1);}
     ;
 
 if_stmt: tIF '(' exp ')' '{' stmt_list '}' {$$ = makeIFSTMT_if($3, $6);}

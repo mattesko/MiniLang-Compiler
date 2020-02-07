@@ -9,7 +9,8 @@ typedef enum {
     k_statementKind_initStrictType,
     k_statementKind_initLoose,
     k_statementKind_declaration,
-    k_statementKind_whileLoop
+    k_statementKind_whileLoop,
+    k_statementKind_ifStmt
 } StatementKind;
 
 typedef enum {
@@ -97,6 +98,8 @@ struct STMT {
             STMT_LIST *stmtList;
         } whileLoop;
         
+        IFSTMT *ifStmt;
+
     } val;
     
 };
@@ -155,7 +158,7 @@ struct IFSTMT {
         {
             EXP *exp;
             STMT_LIST *ifPart;
-            IFSTMT *elsePart;
+            IFSTMT *ifStmt;
         } ifElseIf;
                 
     } val;
@@ -179,6 +182,7 @@ STMT *makeSTMT_initStrictType(char *identifier, TYPE *type, EXP *exp);
 STMT *makeSTMT_initLooseType(char *identifier, EXP *exp);
 STMT *makeSTMT_declaration(char *identifier, TYPE *type);
 STMT *makeSTMT_whileLoop(EXP *exp, STMT_LIST *stmtList);
+STMT *makeSTMT_ifStmt(IFSTMT *ifStmt);
 
 EXP *makeEXP_identifier(char *identifier);
 EXP *makeEXP_boolLiteral(bool boolLiteral);
@@ -190,7 +194,7 @@ EXP *makeEXP_unary(ExpressionKind kind, EXP *unary);
 
 IFSTMT *makeIFSTMT_if(EXP *exp, STMT_LIST *ifPart);
 IFSTMT *makeIFSTMT_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart);
-IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *elsePart);
+IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *ifStmt);
 
 TYPE *makeTYPE(TypeKind kind);
 
