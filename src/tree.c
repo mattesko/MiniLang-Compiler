@@ -53,6 +53,7 @@ STMT *makeSTMT_assignment(char *identifier, EXP *exp)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_assignment;
+    s->val.assignment.identifier = identifier;
     s->val.assignment.exp = exp;
     return s;
 }
@@ -62,6 +63,7 @@ STMT *makeSTMT_initStrictType(char *identifier, TYPE *type, EXP *exp)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_initStrictType;
+    s->val.initStrictType.identifier = identifier;
     s->val.initStrictType.type = type;
     s->val.initStrictType.exp = exp;
     return s;
@@ -72,6 +74,7 @@ STMT *makeSTMT_initLooseType(char *identifier, EXP *exp)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_initLoose;
+    s->val.initLooseType.identifier = identifier;
     s->val.initLooseType.exp = exp;
     return s;
 }
@@ -81,6 +84,7 @@ STMT *makeSTMT_declaration(char *identifier, TYPE *type)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_declaration;
+    s->val.declaration.identifier = identifier;
     s->val.declaration.type = type;
     return s;
 }
