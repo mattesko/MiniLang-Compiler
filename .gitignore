@@ -8,3 +8,7 @@ src/minic
 src/minic.tab.h
 *.bak
 .vscode
+programs/1-scan+parse/invalid
+programs/1-scan+parse/valid
+src/tree.h.gch
+src/pretty.h.gch
