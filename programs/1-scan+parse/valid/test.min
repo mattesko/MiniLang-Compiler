@@ -8,6 +8,12 @@ if (!True && (1 == 2 || False != !True && 4 < 3) || 1 < 2) {
     if (!True != False) {
         var a2: int = 1;
     }
+    else if (True) {
+        print("True");
+    }
+    else if (True) {
+        print("True");
+    }
     else {
         var a2: int = 1;
     }
