@@ -30,8 +30,7 @@ char* parse_args(int argc, char *argv[]) {
         return argv[1];
     }
     else {
-        printf("Not correct number of arguments");
-        return "invalid";
+        fprintf(stderr, "Error: Incorrect number of arguments");
     }
 }
 
