@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -lfl
 
-minic: lex.yy.c minic.tab.c minic.tab.h main.o tree.o
-	$(CC) minic.tab.c lex.yy.c main.o tree.o -o minic $(CFLAGS)
+minic: lex.yy.c minic.tab.c minic.tab.h main.o tree.o pretty.o
+	$(CC) minic.tab.c lex.yy.c main.o tree.o pretty.o -o minic $(CFLAGS)
 
 lex.yy.c: minic.l minic.tab.h
 	flex --header-file=lex.yy.h minic.l
@@ -10,8 +10,14 @@ lex.yy.c: minic.l minic.tab.h
 minic.tab.c minic.tab.h: minic.y
 	bison -d --verbose -t minic.y
 
+main.o: main.c pretty.h
+	$(CC) -c main.c pretty.h
+
 tree.o: tree.c tree.h
 	$(CC) -c tree.c tree.h
+
+pretty.o: pretty.c pretty.h
+	$(CC) -c pretty.c pretty.h
 
 test_lex: minic
 	echo "1.00+200" | ./minic && echo ""

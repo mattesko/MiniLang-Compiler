@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "pretty.h"
 
 extern int print_token;
 extern int yylex();
@@ -52,6 +53,10 @@ void run_mode(char *mode) {
     else if (strcmp(mode, "parse") == 0) {
         yyparse();
         printf("OK\n");
+    }
+    else if (strcmp(mode, "pretty") == 0) {
+        yyparse();
+        prettySTMT_LIST(root);
     }
     else {
         printf("No such mode '%s' supported", mode);
