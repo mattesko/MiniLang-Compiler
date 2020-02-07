@@ -85,6 +85,16 @@ STMT *makeSTMT_declaration(char *identifier, TYPE *type)
     return s;
 }
 
+STMT *makeSTMT_whileLoop(EXP *exp, STMT_LIST *stmtList)
+{
+    STMT *s = malloc(sizeof(STMT));
+    s->lineno = yylineno;
+    s->kind = k_whileLoop;
+    s->val.whileLoop.exp = exp;
+    s->val.whileLoop.stmtList = stmtList;
+    return s;
+}
+
 // EXP *makeEXP_()
 // {
 //     EXP *e = malloc(sizeof(EXP));
@@ -157,9 +167,9 @@ EXP *makeEXP_unary(ExpressionKind kind, EXP *unary)
     return e;
 }
 
-CTRL_FLOW *makeCTRL_FLOW_if(EXP *exp, STMT_LIST *ifPart) 
+IFSTMT *makeIFSTMT_if(EXP *exp, STMT_LIST *ifPart) 
 {
-    CTRL_FLOW *c = malloc(sizeof(CTRL_FLOW));
+    IFSTMT *c = malloc(sizeof(IFSTMT));
     c->lineno = yylineno;
     c->kind = k_if;
     c->val.ifStmt.exp = exp;
@@ -167,9 +177,9 @@ CTRL_FLOW *makeCTRL_FLOW_if(EXP *exp, STMT_LIST *ifPart)
     return c;
 }
 
-CTRL_FLOW *makeCTRL_FLOW_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart)
+IFSTMT *makeIFSTMT_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart)
 {
-    CTRL_FLOW *c = malloc(sizeof(CTRL_FLOW));
+    IFSTMT *c = malloc(sizeof(IFSTMT));
     c->lineno = yylineno;
     c->kind = k_ifElse;
     c->val.ifElse.exp = exp;
@@ -178,24 +188,14 @@ CTRL_FLOW *makeCTRL_FLOW_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart
     return c;
 }
 
-CTRL_FLOW *makeCTRL_FLOW_ifElseIf(EXP *exp, STMT_LIST *ifPart, CTRL_FLOW *elsePart)
+IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *elsePart)
 {
-    CTRL_FLOW *c = malloc(sizeof(CTRL_FLOW));
+    IFSTMT *c = malloc(sizeof(IFSTMT));
     c->lineno = yylineno;
-    c->kind = k_ifElse;
+    c->kind = k_ifElseIf;
     c->val.ifElseIf.exp = exp;
     c->val.ifElseIf.ifPart = ifPart;
     c->val.ifElseIf.elsePart = elsePart;
-    return c;
-}
-
-CTRL_FLOW *makeCTRL_FLOW_while(EXP *exp, STMT_LIST *stmtList)
-{
-    CTRL_FLOW *c = malloc(sizeof(CTRL_FLOW));
-    c->lineno = yylineno;
-    c->kind = k_while;
-    c->val.whileLoop.exp = exp;
-    c->val.whileLoop.stmtList = stmtList;
     return c;
 }
 

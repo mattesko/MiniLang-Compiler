@@ -8,7 +8,8 @@ typedef enum {
     k_assignment,
     k_initStrictType,
     k_initLoose,
-    k_declaration
+    k_declaration,
+    k_whileLoop
 } StatementKind;
 
 typedef enum {
@@ -41,14 +42,14 @@ typedef enum {
 } TypeKind;
 
 typedef enum {
-    k_while,
     k_if,
-    k_ifElse
-} ControlFlowKind;
+    k_ifElse,
+    k_ifElseIf
+} IfStatementKind;
 
 typedef struct PROGRAM PROGRAM;
 typedef struct STMT_LIST STMT_LIST;
-typedef struct CTRL_FLOW CTRL_FLOW;
+typedef struct IFSTMT IFSTMT;
 typedef struct STMT STMT;
 typedef struct EXP EXP;
 typedef struct TYPE TYPE;
@@ -90,6 +91,11 @@ struct STMT {
             char *identifier;
             TYPE *type;
         } declaration;
+
+        struct {
+            EXP *exp;
+            STMT_LIST *stmtList;
+        } whileLoop;
         
     } val;
     
@@ -128,18 +134,11 @@ struct EXP {
 
 };
 
-// TODO THIS WILL BREAK
-// 'if else while' breaks
-struct CTRL_FLOW {
+struct IFSTMT {
     int lineno;
-    ControlFlowKind kind;
+    IfStatementKind kind;
 
     union {
-
-        struct {
-            EXP *exp;
-            STMT_LIST *stmtList;
-        } whileLoop;
 
         struct {
             EXP *exp;
@@ -156,7 +155,7 @@ struct CTRL_FLOW {
         {
             EXP *exp;
             STMT_LIST *ifPart;
-            CTRL_FLOW *elsePart;
+            IFSTMT *elsePart;
         } ifElseIf;
                 
     } val;
@@ -179,6 +178,7 @@ STMT *makeSTMT_assignment(char *identifier, EXP *exp);
 STMT *makeSTMT_initStrictType(char *identifier, TYPE *type, EXP *exp);
 STMT *makeSTMT_initLooseType(char *identifier, EXP *exp);
 STMT *makeSTMT_declaration(char *identifier, TYPE *type);
+STMT *makeSTMT_whileLoop(EXP *exp, STMT_LIST *stmtList);
 
 EXP *makeEXP_identifier(char *identifier);
 EXP *makeEXP_boolLiteral(bool boolLiteral);
@@ -188,10 +188,9 @@ EXP *makeEXP_floatLiteral(float floatLiteral);
 EXP *makeEXP_binary(ExpressionKind kind, EXP *left, EXP *right);
 EXP *makeEXP_unary(ExpressionKind kind, EXP *unary);
 
-CTRL_FLOW *makeCTRL_FLOW_if(EXP *exp, STMT_LIST *ifPart);
-CTRL_FLOW *makeCTRL_FLOW_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart);
-CTRL_FLOW *makeCTRL_FLOW_ifElseIf(EXP *exp, STMT_LIST *ifPart, CTRL_FLOW *elsePart);
-CTRL_FLOW *makeCTRL_FLOW_while(EXP *exp, STMT_LIST *stmtList);
+IFSTMT *makeIFSTMT_if(EXP *exp, STMT_LIST *ifPart);
+IFSTMT *makeIFSTMT_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart);
+IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *elsePart);
 
 TYPE *makeTYPE(TypeKind kind);
 

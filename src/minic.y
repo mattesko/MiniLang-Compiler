@@ -35,14 +35,14 @@ void yyerror(const char *s);
     struct STMT_LIST *stmt_list;
     struct STMT *stmt;
     struct TYPE *type;
-    struct CTRL_FLOW *ctrl_flow;
+    struct IFSTMT *if_stmt;
 }
 
 %type <exp> exp
 %type <stmt_list> stmt_list
 %type <program> program
 %type <stmt> stmt
-%type <ctrl_flow> if_stmt
+%type <if_stmt> if_stmt
 %type <type> type
 
 %token tVAR tFLOAT tINT tBOOL tSTRING tPRINT tWHILE tIF tELSE tREAD
@@ -82,15 +82,15 @@ stmt_list:              {$$ = NULL;}
 stmt: tREAD '(' tIDENTIFIER ')' ';'         {$$ = makeSTMT_read($3);}
     | tPRINT '(' exp ')' ';'                {$$ = makeSTMT_print($3);}
     | tIDENTIFIER '=' exp ';'               {$$ = makeSTMT_assignment($1, $3);}
-    | tWHILE '(' exp ')' '{' stmt_list '}'  {$$ = makeCTRL_FLOW_while($3, $6);}
+    | tWHILE '(' exp ')' '{' stmt_list '}'  {$$ = makeSTMT_whileLoop($3, $6);}
     | tVAR tIDENTIFIER ':' type '=' exp ';' {$$ = makeSTMT_initStrictType($2, $4, $6);}
     | tVAR tIDENTIFIER '=' exp ';'          {$$ = makeSTMT_initLooseType($2, $4);}
     | if_stmt                               {$$ = $1;}
     ;
 
-if_stmt: tIF '(' exp ')' '{' stmt_list '}' {$$ = makeCTRL_FLOW_if($3, $6);}
-    | tIF '(' exp ')' '{' stmt_list '}' tELSE '{' stmt_list '}'  {$$ = makeCTRL_FLOW_ifElse($3, $6, $10);}
-    | tIF '(' exp ')' '{' stmt_list '}' tELSE if_stmt {$$ = makeCTRL_FLOW_ifElseIf($3, $6, $9);}
+if_stmt: tIF '(' exp ')' '{' stmt_list '}' {$$ = makeIFSTMT_if($3, $6);}
+    | tIF '(' exp ')' '{' stmt_list '}' tELSE '{' stmt_list '}'  {$$ = makeIFSTMT_ifElse($3, $6, $10);}
+    | tIF '(' exp ')' '{' stmt_list '}' tELSE if_stmt {$$ = makeIFSTMT_ifElseIf($3, $6, $9);}
     ;
 
 exp:  exp '+' exp           {$$ = makeEXP_binary(k_addition, $1, $3);}
