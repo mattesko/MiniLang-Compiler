@@ -48,7 +48,6 @@ typedef enum {
     k_ifStatementKind_ifElseIf
 } IfStatementKind;
 
-typedef struct PROGRAM PROGRAM;
 typedef struct STMT_LIST STMT_LIST;
 typedef struct IFSTMT IFSTMT;
 typedef struct STMT STMT;
@@ -110,11 +109,6 @@ struct STMT_LIST {
     STMT_LIST *nextStmtList;
 };
 
-struct PROGRAM {
-    int lineno;
-    STMT_LIST *stmtList;
-};
-
 struct EXP {
     int lineno;
     ExpressionKind kind;
@@ -169,8 +163,6 @@ struct TYPE {
     int lineno;
     TypeKind kind;
 };
-
-PROGRAM *makePROGRAM(STMT_LIST *stmtList);
 
 STMT_LIST *makeSTMT_LIST(STMT *currentStmt, STMT_LIST *nextStmtList);
 

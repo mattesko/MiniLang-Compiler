@@ -13,14 +13,6 @@ extern int yylineno;
 //     return s;
 // }
 
-PROGRAM *makePROGRAM(STMT_LIST *stmtList)
-{
-    PROGRAM *p = malloc(sizeof(PROGRAM));
-    p->lineno = yylineno;
-    p->stmtList = stmtList;
-    return p;
-}
-
 STMT_LIST *makeSTMT_LIST(STMT *currentStmt, STMT_LIST *nextStmtList)
 {
     STMT_LIST *s = malloc(sizeof(STMT_LIST));

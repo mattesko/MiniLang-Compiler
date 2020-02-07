@@ -31,7 +31,6 @@ void yyerror(const char *s);
     char *string_val;
     float float_val;
     bool bool_val;
-    struct PROGRAM *program;
     struct EXP *exp;
     struct STMT_LIST *stmt_list;
     struct STMT *stmt;
@@ -40,8 +39,7 @@ void yyerror(const char *s);
 }
 
 %type <exp> exp
-%type <stmt_list> stmt_list
-%type <program> program
+%type <stmt_list> stmt_list program
 %type <stmt> stmt
 %type <if_stmt> if_stmt
 %type <type> type
@@ -74,7 +72,7 @@ void yyerror(const char *s);
 
 // Grammar Section
 %%
-program: stmt_list  {$$ = makePROGRAM($1);}
+program: stmt_list  {root = $1;}
     ;
 
 stmt_list:              {$$ = NULL;}

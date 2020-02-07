@@ -5,6 +5,8 @@ extern int print_token;
 extern int yylex();
 extern int yyparse();
 
+STMT_LIST *root;
+
 void run_mode(char *mode);
 char* parse_args(int argc, char *argv[]);
 
