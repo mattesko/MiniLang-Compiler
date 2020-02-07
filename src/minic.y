@@ -25,6 +25,7 @@ void yyerror(const char *s);
 	#include "tree.h"
 }
 
+// Union part: Define kind of data values can hold
 %union {
     int int_val;
     char *string_val;
@@ -71,6 +72,7 @@ void yyerror(const char *s);
 %locations
 %define parse.error verbose
 
+// Grammar Section
 %%
 program: stmt_list  {$$ = makePROGRAM($1);}
     ;
@@ -93,21 +95,21 @@ if_stmt: tIF '(' exp ')' '{' stmt_list '}' {$$ = makeIFSTMT_if($3, $6);}
     | tIF '(' exp ')' '{' stmt_list '}' tELSE if_stmt {$$ = makeIFSTMT_ifElseIf($3, $6, $9);}
     ;
 
-exp:  exp '+' exp           {$$ = makeEXP_binary(k_addition, $1, $3);}
-    | exp '-' exp           {$$ = makeEXP_binary(k_subtraction, $1, $3);}
-    | exp '*' exp           {$$ = makeEXP_binary(k_multiplication, $1, $3);}
-    | exp '/' exp           {$$ = makeEXP_binary(k_division, $1, $3);}
+exp:  exp '+' exp           {$$ = makeEXP_binary(k_expressionKind_addition, $1, $3);}
+    | exp '-' exp           {$$ = makeEXP_binary(k_expressionKind_subtraction, $1, $3);}
+    | exp '*' exp           {$$ = makeEXP_binary(k_expressionKind_multiplication, $1, $3);}
+    | exp '/' exp           {$$ = makeEXP_binary(k_expressionKind_division, $1, $3);}
     | '(' exp ')'           {$$ = $2;}
-    | '-' exp               {$$ = makeEXP_unary(k_unaryMinus, $2);}
-    | '!' exp               {$$ = makeEXP_unary(k_unaryLogicNot, $2);}
-    | exp tEQUAL exp        {$$ = makeEXP_binary(k_equal, $1, $3);}
-    | exp tNEQUAL exp       {$$ = makeEXP_binary(k_notEqual, $1, $3);}
-    | exp tGT exp           {$$ = makeEXP_binary(k_GT, $1, $3);}
-    | exp tGTE exp          {$$ = makeEXP_binary(k_GTE, $1, $3);}
-    | exp tST exp           {$$ = makeEXP_binary(k_ST, $1, $3);}
-    | exp tSTE exp          {$$ = makeEXP_binary(k_STE, $1, $3);}
-    | exp tLOGIC_OR exp     {$$ = makeEXP_binary(k_logicOr, $1, $3);}
-    | exp tLOGIC_AND exp    {$$ = makeEXP_binary(k_logicAnd, $1, $3);}
+    | '-' exp               {$$ = makeEXP_unary(k_expressionKind_unaryMinus, $2);}
+    | '!' exp               {$$ = makeEXP_unary(k_expressionKind_unaryLogicNot, $2);}
+    | exp tEQUAL exp        {$$ = makeEXP_binary(k_expressionKind_equal, $1, $3);}
+    | exp tNEQUAL exp       {$$ = makeEXP_binary(k_expressionKind_notEqual, $1, $3);}
+    | exp tGT exp           {$$ = makeEXP_binary(k_expressionKind_GT, $1, $3);}
+    | exp tGTE exp          {$$ = makeEXP_binary(k_expressionKind_GTE, $1, $3);}
+    | exp tST exp           {$$ = makeEXP_binary(k_expressionKind_ST, $1, $3);}
+    | exp tSTE exp          {$$ = makeEXP_binary(k_expressionKind_STE, $1, $3);}
+    | exp tLOGIC_OR exp     {$$ = makeEXP_binary(k_expressionKind_logicOr, $1, $3);}
+    | exp tLOGIC_AND exp    {$$ = makeEXP_binary(k_expressionKind_logicAnd, $1, $3);}
     | tIDENTIFIER           {$$ = makeEXP_identifier($1);}
     | tBOOL_LITERAL         {$$ = makeEXP_boolLiteral($1);}
     | tSTRING_LITERAL       {$$ = makeEXP_stringLiteral($1);}
@@ -115,9 +117,9 @@ exp:  exp '+' exp           {$$ = makeEXP_binary(k_addition, $1, $3);}
     | tFLOAT_LITERAL        {$$ = makeEXP_floatLiteral($1);}
     ;
 
-type: tBOOL     {$$ = makeTYPE(k_bool);}
-    | tSTRING   {$$ = makeTYPE(k_string);}
-    | tINT      {$$ = makeTYPE(k_int);}
-    | tFLOAT    {$$ = makeTYPE(k_float);}
+type: tBOOL     {$$ = makeTYPE(k_typeKind_bool);}
+    | tSTRING   {$$ = makeTYPE(k_typeKind_string);}
+    | tINT      {$$ = makeTYPE(k_typeKind_int);}
+    | tFLOAT    {$$ = makeTYPE(k_typeKind_float);}
     ;
 %%

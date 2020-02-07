@@ -3,48 +3,48 @@
 #define TREE_H
 
 typedef enum {
-    k_read,
-    k_print,
-    k_assignment,
-    k_initStrictType,
-    k_initLoose,
-    k_declaration,
-    k_whileLoop
+    k_statementKind_read,
+    k_statementKind_print,
+    k_statementKind_assignment,
+    k_statementKind_initStrictType,
+    k_statementKind_initLoose,
+    k_statementKind_declaration,
+    k_statementKind_whileLoop
 } StatementKind;
 
 typedef enum {
-    k_identifier,
-    k_intLiteral,
-    k_floatLiteral,
-    k_stringLiteral,
-    k_boolLiteral,
-    k_addition,
-    k_subtraction,
-    k_multiplication,
-    k_division,
-    k_unaryMinus,
-    k_unaryLogicNot,
-    k_equal,
-    k_notEqual,
-    k_GT,
-    k_GTE,
-    k_ST,
-    k_STE,
-    k_logicOr,
-    k_logicAnd
+    k_expressionKind_identifier,
+    k_expressionKind_intLiteral,
+    k_expressionKind_floatLiteral,
+    k_expressionKind_stringLiteral,
+    k_expressionKind_boolLiteral,
+    k_expressionKind_addition,
+    k_expressionKind_subtraction,
+    k_expressionKind_multiplication,
+    k_expressionKind_division,
+    k_expressionKind_unaryMinus,
+    k_expressionKind_unaryLogicNot,
+    k_expressionKind_equal,
+    k_expressionKind_notEqual,
+    k_expressionKind_GT,
+    k_expressionKind_GTE,
+    k_expressionKind_ST,
+    k_expressionKind_STE,
+    k_expressionKind_logicOr,
+    k_expressionKind_logicAnd
 } ExpressionKind;
 
 typedef enum {
-    k_bool,
-    k_string,
-    k_int,
-    k_float
+    k_typeKind_bool,
+    k_typeKind_string,
+    k_typeKind_int,
+    k_typeKind_float
 } TypeKind;
 
 typedef enum {
-    k_if,
-    k_ifElse,
-    k_ifElseIf
+    k_ifStatementKind_if,
+    k_ifStatementKind_ifElse,
+    k_ifStatementKind_ifElseIf
 } IfStatementKind;
 
 typedef struct PROGRAM PROGRAM;
