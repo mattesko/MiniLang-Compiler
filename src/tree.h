@@ -32,7 +32,8 @@ typedef enum {
     k_expressionKind_ST,
     k_expressionKind_STE,
     k_expressionKind_logicOr,
-    k_expressionKind_logicAnd
+    k_expressionKind_logicAnd,
+    k_expressionKind_withParantheses
 } ExpressionKind;
 
 typedef enum {
@@ -96,7 +97,7 @@ struct STMT {
             EXP *exp;
             STMT_LIST *stmtList;
         } whileLoop;
-        
+
         IFSTMT *ifStmt;
 
     } val;
@@ -183,6 +184,7 @@ EXP *makeEXP_intLiteral(int intLiteral);
 EXP *makeEXP_floatLiteral(float floatLiteral);
 EXP *makeEXP_binary(ExpressionKind kind, EXP *left, EXP *right);
 EXP *makeEXP_unary(ExpressionKind kind, EXP *unary);
+EXP *makeEXP_withParantheses(EXP *exp);
 
 IFSTMT *makeIFSTMT_if(EXP *exp, STMT_LIST *ifPart);
 IFSTMT *makeIFSTMT_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart);

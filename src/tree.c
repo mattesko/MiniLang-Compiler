@@ -163,6 +163,15 @@ EXP *makeEXP_unary(ExpressionKind kind, EXP *unary)
     return e;
 }
 
+EXP *makeEXP_withParantheses(EXP *exp)
+{
+    EXP *e = malloc(sizeof(EXP));
+    e->lineno = yylineno;
+    e->kind = k_expressionKind_withParantheses;
+    e->val.unary = exp;
+    return e;
+}
+
 STMT *makeSTMT_ifStmt(IFSTMT *ifStmt)
 {
     STMT *s = malloc(sizeof(STMT));
