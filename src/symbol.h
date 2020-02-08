@@ -25,7 +25,7 @@ typedef struct SymbolTable
 
 void makeSymbolTable(STMT_LIST *root);
 
-Symbol *putSymbol(SymbolTable *t, char *name, Type type);
+Symbol *putSymbol(SymbolTable *t, char *name, Type type, int lineno);
 Symbol *getSymbol(SymbolTable *t, char *name);
 
 SymbolTable *initSymbolTable();

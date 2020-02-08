@@ -6,7 +6,7 @@
 
 #define SCANF_BUFFSIZE 1024
 
-Symbol *putSymbol(SymbolTable *t, char *name, Type type);
+Symbol *putSymbol(SymbolTable *t, char *name, Type type, int lineno);
 Symbol *getSymbol(SymbolTable *t, char *name);
 Symbol *getSymbolFromScope(SymbolTable *t, char *name);
 SymbolTable *initSymbolTable();
@@ -19,7 +19,7 @@ Type symEXP(EXP *exp, SymbolTable *table);
 
 void printSymbolTableRow(char *id, SymbolTable *scope, Type t_type);
 void throwErrorUndefinedId(int lineno, char *id);
-void throwErrorRedeclaredId(char *id);
+void throwErrorRedeclaredId(int lineno, char *id);
 
 char *chooseScanfFormat(Type t_type);
 
@@ -102,12 +102,12 @@ void symSTMT(STMT *stmt, SymbolTable *table)
 
             // Want to allow redeclaring variables if it's in a nested scope
             sym = getSymbolFromScope(table, id);
-            if (sym != NULL) throwErrorRedeclaredId(id);
+            if (sym != NULL) throwErrorRedeclaredId(stmt->lineno, id);
 
             t_type_exp = symEXP(stmt->val.initStrictType.exp, table);
             checkAssignment(stmt->val.initStrictType.type, t_type_exp, stmt->lineno);
 
-            putSymbol(table, id, t_type_exp);
+            putSymbol(table, id, t_type_exp, stmt->lineno);
             if (print_sym_table) printSymbolTableRow(id, table, t_type_exp);
             
             break;
@@ -118,11 +118,11 @@ void symSTMT(STMT *stmt, SymbolTable *table)
 
             // Want to allow redeclaring variables if it's in a nested scope
             sym = getSymbolFromScope(table, id);
-            if (sym != NULL) throwErrorRedeclaredId(id);
+            if (sym != NULL) throwErrorRedeclaredId(stmt->lineno, id);
 
             t_type_exp = symEXP(stmt->val.initLooseType.exp, table);
 
-            putSymbol(table, id, t_type_exp);
+            putSymbol(table, id, t_type_exp, stmt->lineno);
             if (print_sym_table) printSymbolTableRow(id, table, t_type_exp);
 
             break;
@@ -132,7 +132,7 @@ void symSTMT(STMT *stmt, SymbolTable *table)
             id = stmt->val.declaration.identifier;
             sym = getSymbol(table, id);
 
-            if (sym != NULL) throwErrorRedeclaredId(id);
+            if (sym != NULL) throwErrorRedeclaredId(stmt->lineno, id);
             
             // TODO check if var a : int; is valid!!
             // this never happens lol
@@ -337,12 +337,12 @@ Symbol *getSymbolFromScope(SymbolTable *t, char *name)
     return NULL;
 }
 
-Symbol *putSymbol(SymbolTable *t, char *name, Type type)
+Symbol *putSymbol(SymbolTable *t, char *name, Type type, int lineno)
 {
     int hash = Hash(name);
     for (Symbol *s = t->table[hash]; s; s->next)
     {   
-        if (strcmp(s->name, name) == 0) throwErrorRedeclaredId(s->name);
+        if (strcmp(s->name, name) == 0) throwErrorRedeclaredId(lineno, s->name);
     }
 
     Symbol *s = malloc(sizeof(Symbol));
@@ -384,8 +384,8 @@ void throwErrorUndefinedId(int lineno, char *id)
     exit(1);
 }
 
-void throwErrorRedeclaredId(char *id)
+void throwErrorRedeclaredId(int lineno, char *id)
 {
-    fprintf(stderr, "Error: \"%s\" is already declared\n", id);
+    fprintf(stderr, "Error: (line %d) \"%s\" is already declared\n", lineno, id);
     exit(1);
 }
