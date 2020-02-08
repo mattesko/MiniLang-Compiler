@@ -221,3 +221,22 @@ TYPE *makeTYPE(Type type)
     t->type = type;
     return t;
 }
+
+char *typeToString(Type t_type)
+{
+    switch (t_type)
+    {
+        case t_bool:
+            return "bool";
+            break;
+        case t_int:
+            return "int";
+            break;
+        case t_string:
+            return "string";
+            break;
+        case t_float:
+            return "float";
+            break;
+        }
+}

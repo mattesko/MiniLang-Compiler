@@ -192,5 +192,6 @@ IFSTMT *makeIFSTMT_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart);
 IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *ifStmt);
 
 TYPE *makeTYPE(Type type);
+char *typeToString(Type type);
 
 #endif
