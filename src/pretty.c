@@ -225,16 +225,16 @@ void prettyTYPE(TYPE *t)
 {
     switch (t->kind)
     {
-        case k_typeKind_bool:
+        case t_bool:
             printf("bool");
             break;
-        case k_typeKind_string:
+        case t_string:
             printf("string");
             break;
-        case k_typeKind_int:
+        case t_int:
             printf("int");
             break;
-        case k_typeKind_float:
+        case t_float:
             printf("float");
             break;
     }

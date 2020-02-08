@@ -37,11 +37,11 @@ typedef enum {
 } ExpressionKind;
 
 typedef enum {
-    k_typeKind_bool,
-    k_typeKind_string,
-    k_typeKind_int,
-    k_typeKind_float
-} TypeKind;
+    t_bool,
+    t_string,
+    t_int,
+    t_float
+} Type;
 
 typedef enum {
     k_ifStatementKind_if,
@@ -162,7 +162,7 @@ struct IFSTMT {
 
 struct TYPE {
     int lineno;
-    TypeKind kind;
+    Type type;
 };
 
 STMT_LIST *makeSTMT_LIST(STMT *currentStmt, STMT_LIST *nextStmtList);
@@ -190,6 +190,6 @@ IFSTMT *makeIFSTMT_if(EXP *exp, STMT_LIST *ifPart);
 IFSTMT *makeIFSTMT_ifElse(EXP *exp, STMT_LIST *ifPart, STMT_LIST *elsePart);
 IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *ifStmt);
 
-TYPE *makeTYPE(TypeKind kind);
+TYPE *makeTYPE(Type type);
 
 #endif

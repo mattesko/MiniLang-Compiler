@@ -115,9 +115,9 @@ exp:  exp '+' exp           {$$ = makeEXP_binary(k_expressionKind_addition, $1, 
     | tFLOAT_LITERAL        {$$ = makeEXP_floatLiteral($1);}
     ;
 
-type: tBOOL     {$$ = makeTYPE(k_typeKind_bool);}
-    | tSTRING   {$$ = makeTYPE(k_typeKind_string);}
-    | tINT      {$$ = makeTYPE(k_typeKind_int);}
-    | tFLOAT    {$$ = makeTYPE(k_typeKind_float);}
+type: tBOOL     {$$ = makeTYPE(t_bool);}
+    | tSTRING   {$$ = makeTYPE(t_string);}
+    | tINT      {$$ = makeTYPE(t_int);}
+    | tFLOAT    {$$ = makeTYPE(t_float);}
     ;
 %%

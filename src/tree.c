@@ -214,10 +214,10 @@ IFSTMT *makeIFSTMT_ifElseIf(EXP *exp, STMT_LIST *ifPart, IFSTMT *ifStmt)
     return c;
 }
 
-TYPE *makeTYPE(TypeKind kind) 
+TYPE *makeTYPE(Type type) 
 {
     TYPE *t = malloc(sizeof(TYPE));
     t->lineno = yylineno;
-    t->kind = kind;
+    t->type = type;
     return t;
 }
