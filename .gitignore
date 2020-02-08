@@ -10,5 +10,4 @@ src/minic.tab.h
 .vscode
 programs/1-scan+parse/invalid
 programs/1-scan+parse/valid
-src/tree.h.gch
-src/pretty.h.gch
+src/*.h.gch
