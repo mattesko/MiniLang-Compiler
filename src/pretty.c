@@ -5,7 +5,7 @@ int num_tabs = 0;
 void prettySTMT(STMT *s);
 void prettySTMT_LIST(STMT_LIST *s);
 void prettyEXP(EXP *e);
-void prettyTYPE(TYPE *t);
+void prettyTYPE(Type t);
 void prettyIFSTMT(IFSTMT *s);
 void print_tabs();
 
@@ -221,9 +221,9 @@ void prettyEXP(EXP *e)
     }
 }
 
-void prettyTYPE(TYPE *t)
+void prettyTYPE(Type t)
 {
-    switch (t->kind)
+    switch (t)
     {
         case t_bool:
             printf("bool");

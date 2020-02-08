@@ -63,6 +63,7 @@ struct STMT {
 
         struct {
             char *identifier;
+            Type type;
         } read;
 
         struct {
@@ -77,7 +78,7 @@ struct STMT {
         struct
         {
             char *identifier;
-            TYPE *type;
+            Type type;
             EXP *exp;
         } initStrictType;
 
@@ -90,7 +91,7 @@ struct STMT {
 
         struct {
             char *identifier;
-            TYPE *type;
+            Type type;
         } declaration;
 
         struct {

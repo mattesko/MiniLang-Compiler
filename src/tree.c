@@ -57,7 +57,7 @@ STMT *makeSTMT_initStrictType(char *identifier, TYPE *type, EXP *exp)
     s->lineno = yylineno;
     s->kind = k_statementKind_initStrictType;
     s->val.initStrictType.identifier = strdup(identifier);
-    s->val.initStrictType.type = type;
+    s->val.initStrictType.type = type->type;
     s->val.initStrictType.exp = exp;
     return s;
 }
@@ -78,7 +78,7 @@ STMT *makeSTMT_declaration(char *identifier, TYPE *type)
     s->lineno = yylineno;
     s->kind = k_statementKind_declaration;
     s->val.declaration.identifier = strdup(identifier);
-    s->val.declaration.type = type;
+    s->val.declaration.type = type->type;
     return s;
 }
 
