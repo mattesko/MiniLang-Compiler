@@ -21,7 +21,7 @@ ALPHA_NUM_CHAR [a-zA-Z0-9]
 /* Tokenization Specifications */
 %%
 [\r\n]+
-[ \t]+      if (print_token) {printf("WHITESPACE, length %u\n", yyleng);}
+[ \t]+
 
 "+"         if (print_token) {printf("PLUS\n");} return '+';
 "-"         if (print_token) {printf("tMINUS\n");} return '-';
