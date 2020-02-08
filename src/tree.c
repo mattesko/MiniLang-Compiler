@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "tree.h"
 
 extern int yylineno;
@@ -27,7 +28,7 @@ STMT *makeSTMT_read(char *identifier)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_read;
-    s->val.read.identifier = identifier;
+    s->val.read.identifier = strdup(identifier);
     return s;
 }
 
@@ -45,7 +46,7 @@ STMT *makeSTMT_assignment(char *identifier, EXP *exp)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_assignment;
-    s->val.assignment.identifier = identifier;
+    s->val.assignment.identifier = strdup(identifier);
     s->val.assignment.exp = exp;
     return s;
 }
@@ -55,7 +56,7 @@ STMT *makeSTMT_initStrictType(char *identifier, TYPE *type, EXP *exp)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_initStrictType;
-    s->val.initStrictType.identifier = identifier;
+    s->val.initStrictType.identifier = strdup(identifier);
     s->val.initStrictType.type = type;
     s->val.initStrictType.exp = exp;
     return s;
@@ -66,7 +67,7 @@ STMT *makeSTMT_initLooseType(char *identifier, EXP *exp)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_initLoose;
-    s->val.initLooseType.identifier = identifier;
+    s->val.initLooseType.identifier = strdup(identifier);
     s->val.initLooseType.exp = exp;
     return s;
 }
@@ -76,7 +77,7 @@ STMT *makeSTMT_declaration(char *identifier, TYPE *type)
     STMT *s = malloc(sizeof(STMT));
     s->lineno = yylineno;
     s->kind = k_statementKind_declaration;
-    s->val.declaration.identifier = identifier;
+    s->val.declaration.identifier = strdup(identifier);
     s->val.declaration.type = type;
     return s;
 }
@@ -105,7 +106,7 @@ EXP *makeEXP_identifier(char *identifier)
 	EXP *e = malloc(sizeof(EXP));
 	e->lineno = yylineno;
 	e->kind = k_expressionKind_identifier;
-	e->val.identifier = identifier;
+	e->val.identifier = strdup(identifier);
 	return e;
 }
 
@@ -123,7 +124,7 @@ EXP *makeEXP_stringLiteral(char *stringLiteral)
     EXP *e = malloc(sizeof(EXP));
     e->lineno = yylineno;
     e->kind = k_expressionKind_stringLiteral;
-    e->val.stringLiteral = stringLiteral;
+    e->val.stringLiteral = strdup(stringLiteral);
     return e;
 }
 
