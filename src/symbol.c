@@ -8,6 +8,7 @@
 
 Symbol *putSymbol(SymbolTable *t, char *name, Type type);
 Symbol *getSymbol(SymbolTable *t, char *name);
+Symbol *getSymbolFromScope(SymbolTable *t, char *name);
 SymbolTable *initSymbolTable();
 SymbolTable *scopeSymbolTable(SymbolTable *parent);
 
@@ -98,8 +99,9 @@ void symSTMT(STMT *stmt, SymbolTable *table)
         case k_statementKind_initStrictType:
 
             id = stmt->val.initStrictType.identifier;
-            sym = getSymbol(table, id);
 
+            // Want to allow redeclaring variables if it's in a nested scope
+            sym = getSymbolFromScope(table, id);
             if (sym != NULL) throwErrorRedeclaredId(id);
 
             t_type_exp = symEXP(stmt->val.initStrictType.exp, table);
@@ -113,8 +115,9 @@ void symSTMT(STMT *stmt, SymbolTable *table)
         case k_statementKind_initLoose:
 
             id = stmt->val.initLooseType.identifier;
-            sym = getSymbol(table, id);
 
+            // Want to allow redeclaring variables if it's in a nested scope
+            sym = getSymbolFromScope(table, id);
             if (sym != NULL) throwErrorRedeclaredId(id);
 
             t_type_exp = symEXP(stmt->val.initLooseType.exp, table);
@@ -225,7 +228,6 @@ Type symEXP(EXP *exp, SymbolTable *table)
             t_type_right = symEXP(exp->val.binary.right, table);
 
             t_type = resolveBinaryMath(t_type_left, t_type_right, exp->lineno);
-            // TODO set type to result. think this is right?
             return t_type;
             break;
 
@@ -252,7 +254,6 @@ Type symEXP(EXP *exp, SymbolTable *table)
             t_type_left = symEXP(exp->val.binary.left, table);
             t_type_right = symEXP(exp->val.binary.right, table);
             checkBinaryComparison(t_type_left, t_type_right, exp->lineno);
-            // TODO set type to result as bool. think this is right?
             return t_bool;
             break;
 
@@ -261,7 +262,6 @@ Type symEXP(EXP *exp, SymbolTable *table)
             t_type_left = symEXP(exp->val.binary.left, table);
             t_type_right = symEXP(exp->val.binary.right, table);
             checkBinaryLogic(t_type_left, t_type_right, exp->lineno);
-            // TODO set result to bool. think this is right?
             return t_bool;
             break;
         case k_expressionKind_withParantheses:
@@ -324,6 +324,17 @@ Symbol *getSymbol(SymbolTable *t, char *name)
 
     if (t->parent == NULL) return NULL;
     return getSymbol(t->parent, name);
+}
+
+Symbol *getSymbolFromScope(SymbolTable *t, char *name)
+{
+    int hash = Hash(name);
+
+    for (Symbol *s = t->table[hash]; s; s = s->next) 
+    {
+        if (strcmp(s->name, name) == 0) return s;
+    }
+    return NULL;
 }
 
 Symbol *putSymbol(SymbolTable *t, char *name, Type type)
