@@ -61,7 +61,7 @@ Type resolveBinaryMath(Type t_type_left, Type t_type_right, int lineno)
 
 void checkUnaryMinus(Type t_type, int lineno)
 {
-    if (t_type != t_int || t_type != t_float)
+    if (t_type != t_int && t_type != t_float)
     {
         fprintf(stderr, "Error: (line %d) cannot express type '%s' with '-' operator\n", lineno, typeToString(t_type));
         exit(1);
