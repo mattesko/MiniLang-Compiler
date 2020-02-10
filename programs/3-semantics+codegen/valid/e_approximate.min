@@ -1,0 +1,33 @@
+# Approximate the value of natural base of ln 'e' by a finite sum. Sum up
+# elements in the 1/n! series until the change between iterations is less than
+# a given threshold.
+#
+# e is approximately equal to an infinite sum (1/n!) where n: 0->infinity
+
+var n: int = 0;
+var sum: float = 0.0;
+var last: float = 0.0;
+
+var fact: float = 1.0;
+var threshold: float = 0.001;
+var is_done: bool = False;
+
+var change: float = 0.0;
+while (is_done != True) {
+
+    last = sum;
+    sum = sum + 1 / fact;
+
+    n = n + 1;
+    fact = fact * n;
+
+    change = sum - last;
+    if (change <= threshold) {
+        is_done = True;
+    }
+}
+print("Approximate value of e: ");
+print(sum);
+print(". Computed after ");
+print(n);
+print(" iterations.");
