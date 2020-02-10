@@ -20,13 +20,16 @@ char *choosePrintfSpecifier(Type t);
 char *chooseScanfFormat(Type t);
 char *str_replace(char *orig, char *rep, char *with);
 
+void genBuiltIn_readBool();
+void genBuiltIn_concat();
+void genSTMT_readBool(char *id);
+
 void genProgram(STMT_LIST *root, char *name)
 {   
     char *minilang_suffix = ".min";
     char *c_suffix = ".c";
     char *filename = str_replace(name, minilang_suffix, c_suffix);
     char *headers = "#include <stdbool.h>\n#include <stdlib.h>\n#include <stdio.h>\n#include <string.h>\n";
-    char *builtin_strcat = "char *concat(char *str1, char *str2)\n{\n\tchar *res = malloc(sizeof(str1)+sizeof(str2));\n\tstrcat(res, str1);\n\tstrcat(res, str2);\n\treturn res;\n}\n";
 
     targetFile = fopen(filename, "w");
 
@@ -35,7 +38,8 @@ void genProgram(STMT_LIST *root, char *name)
         if (root->currentStmt != NULL)
         {
             fprintf(targetFile, headers);
-            fprintf(targetFile, builtin_strcat);
+            genBuiltIn_concat();
+            genBuiltIn_readBool();
             fprintf(targetFile, "void main()\n{\n");
 
             num_tabs_gen++;
@@ -67,7 +71,14 @@ void genSTMT(STMT *s)
     {
         case k_statementKind_read:
             scanf_format = chooseScanfFormat(s->val.read.type);
-            fprintf(targetFile, "scanf(\"%s\", &%s);\n", scanf_format, s->val.read.identifier);
+            if (s->val.read.type == t_bool)
+            {
+                genSTMT_readBool(s->val.read.identifier);
+            }
+            else 
+            {
+                fprintf(targetFile, "scanf(\"%s\", &%s);\n", scanf_format, s->val.read.identifier);
+            }
             break;
 
         case k_statementKind_print:
@@ -190,7 +201,7 @@ void genIFSTMT(IFSTMT *s)
     }
 }
 
-void genStringConcat(EXP *left, EXP *right)
+void genEXP_stringConcat(EXP *left, EXP *right)
 {
     fprintf(targetFile, "concat(");
     genEXP(left);
@@ -222,7 +233,7 @@ void genEXP(EXP *e)
         case k_expressionKind_addition:
             if (e->type == t_string)
             {
-                genStringConcat(e->val.binary.left, e->val.binary.right);
+                genEXP_stringConcat(e->val.binary.left, e->val.binary.right);
             }
             else
             {
@@ -322,6 +333,51 @@ void genTYPE(Type t)
     }
 }
 
+void genBuiltIn_concat()
+{
+    char *builtin_strcat = 
+    "char *concat(char *str1, char *str2)\n"
+    "{\n"
+    "\tchar *res = malloc(sizeof(str1)+sizeof(str2));\n"
+    "\tstrcat(res, str1);\n"
+    "\tstrcat(res, str2);\n"
+    "\treturn res;\n"
+    "}\n";
+    fprintf(targetFile, builtin_strcat);
+}
+
+void genSTMT_readBool(char *id)
+{
+    fprintf(targetFile, "_builtIn_readBool(&%s);", id);
+}
+
+void genBuiltIn_readBool()
+{   
+    char *format = chooseScanfFormat(t_bool); 
+    fprintf(targetFile, "void _builtIn_readBool(bool *b)\n{\n");
+    
+    num_tabs_gen++;
+    print_tabs_gen();
+    fprintf(targetFile, "char *__bool_str_tmp = malloc(2);\n");
+    
+    print_tabs_gen();
+    fprintf(targetFile, "scanf(\"%s\", __bool_str_tmp);\n", format);
+
+    print_tabs_gen();
+    fprintf(targetFile,"if (strcmp(__bool_str_tmp, \"True\") == 0) *b = true;\n");
+
+    print_tabs_gen();
+    fprintf(targetFile,"else if (strcmp(__bool_str_tmp, \"False\") == 0) *b = false;\n");
+    
+    print_tabs_gen();
+    fprintf(targetFile,"else {fprintf(stderr, \"Error: invalid value for type bool\"); exit(EXIT_FAILURE);}\n");
+
+    print_tabs_gen();
+    fprintf(targetFile,"free(__bool_str_tmp);\n");
+    fprintf(targetFile, "}\n\n");
+    num_tabs_gen--;
+}
+
 char *chooseScanfFormat(Type t)
 {
     char *format = malloc(2);
@@ -335,13 +391,10 @@ char *chooseScanfFormat(Type t)
             sprintf(format, "%%%dlf", SCANF_BUFFSIZE);
             return format;
             break;
+        case t_bool:
         case t_string:
             sprintf(format, "%%%ds", SCANF_BUFFSIZE);
             return format;
-            break;
-        case t_bool:
-            sprintf(format, "%%%ds", SCANF_BUFFSIZE);
-            return format; // TODO change scanned boolean to type bool
             break;
     }
 }
