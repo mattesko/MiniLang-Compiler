@@ -84,7 +84,7 @@ void genSTMT(STMT *s)
         case k_statementKind_print:
 
             specifier = choosePrintfSpecifier(s->val.print.exp->type);
-            fprintf(targetFile, "printf(\"%s\", ", specifier);
+            fprintf(targetFile, "printf(\"%s\\n\", ", specifier);
             genEXP(s->val.print.exp);
             fprintf(targetFile, ");\n");
             break;
