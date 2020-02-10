@@ -28,4 +28,8 @@ fi
 #
 # You MUST replace the following command with the command for invoking your compiler
 
-./src/minic "$1" < "$2"
+if [[ "|scan|tokens|parse|pretty|symbol|typecheck|" == *"|$1|"* ]] ; then
+	./src/minic "$1" < "$2"
+elif [[ "|codegen|" == *"|$1|"* ]] ; then
+	./src/minic "$1" "$2" < "$2"
+fi
