@@ -1,0 +1,6 @@
+var a = "Literal slash n: \n";
+print(a);
+var b = "Literal 2 slashes n: \\n";
+print(b);
+var c = "Literal 3 slashes n: \\\n";
+print(c);

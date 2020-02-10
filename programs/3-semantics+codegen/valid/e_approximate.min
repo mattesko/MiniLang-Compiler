@@ -26,8 +26,8 @@ while (is_done != True) {
         is_done = True;
     }
 }
-print("Approximate value of e: ");
+print("Approximate " + "value of e: ");
 print(sum);
-print(". Computed after ");
+print("Computed after ");
 print(n);
-print(" iterations.");
+print("iterations.");

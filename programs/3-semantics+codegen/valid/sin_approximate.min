@@ -1,0 +1,39 @@
+# Approximate sin(x) with a Taylor series
+#
+# sin(x) = sum (-1)^i / (2i + 1)! * x^(2i+1) where i: 0->infinity
+
+var angle = 0.0;
+print("What radian value of sin do you want to approximate?");
+read(angle);
+
+var threshold = 0.0001;
+print("With what terminating threshold of change between iterations?");
+read(threshold);
+
+var i = 0;
+var denominator = 1;
+var sum = threshold + 1;
+var last = 0.0;
+var numerator = 1;
+var exponent = 2 * i + 1;
+var pow_result = angle;
+
+while (sum - last <= threshold) {
+    
+    while (exponent != 0) {
+        pow_result = pow_result * angle;
+        exponent = exponent - 1;
+    }
+    
+    last = sum;
+    sum = numerator * pow_result / denominator ;
+    
+    i = i + 1;
+    exponent = 2 * i + 1;
+    denominator = 2 * i * (2 * i - 1);
+    numerator = -1 * numerator;
+    pow_result = angle;
+}
+
+print("Approximation: ");
+print(sum);
