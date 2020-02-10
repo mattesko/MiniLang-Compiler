@@ -40,4 +40,9 @@ test_lex: minic
 	echo "^" | ./minic && echo ""
 
 clean:
-	rm minic minic.tab.c lex.yy.c minic.tab.h
+	rm *.gch
+	rm *.o
+	rm lex.yy.c 
+	rm minic.tab.h
+	rm minic.tab.c 
+	rm minic 
