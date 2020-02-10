@@ -49,11 +49,6 @@ void prettySTMT(STMT *s)
             prettyEXP(s->val.initLooseType.exp);
             printf(";\n");
             break;
-        case k_statementKind_declaration:
-            printf("var %s: ", s->val.declaration.identifier);
-            prettyTYPE(s->val.declaration.type);
-            printf(";\n");
-            break;
         case k_statementKind_whileLoop:
 
             printf("while(");

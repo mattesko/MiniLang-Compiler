@@ -72,16 +72,6 @@ STMT *makeSTMT_initLooseType(char *identifier, EXP *exp)
     return s;
 }
 
-STMT *makeSTMT_declaration(char *identifier, TYPE *type)
-{
-    STMT *s = malloc(sizeof(STMT));
-    s->lineno = yylineno;
-    s->kind = k_statementKind_declaration;
-    s->val.declaration.identifier = strdup(identifier);
-    s->val.declaration.type = type->type;
-    return s;
-}
-
 STMT *makeSTMT_whileLoop(EXP *exp, STMT_LIST *stmtList)
 {
     STMT *s = malloc(sizeof(STMT));

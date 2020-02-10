@@ -8,7 +8,6 @@ typedef enum {
     k_statementKind_assignment,
     k_statementKind_initStrictType,
     k_statementKind_initLoose,
-    k_statementKind_declaration,
     k_statementKind_whileLoop,
     k_statementKind_ifStmt
 } StatementKind;
@@ -87,12 +86,6 @@ struct STMT {
             char *identifier;
             EXP *exp;
         } initLooseType;
-
-
-        struct {
-            char *identifier;
-            Type type;
-        } declaration;
 
         struct {
             EXP *exp;
@@ -175,7 +168,6 @@ STMT *makeSTMT_print(EXP *exp);
 STMT *makeSTMT_assignment(char *identifier, EXP *exp);
 STMT *makeSTMT_initStrictType(char *identifier, TYPE *type, EXP *exp);
 STMT *makeSTMT_initLooseType(char *identifier, EXP *exp);
-STMT *makeSTMT_declaration(char *identifier, TYPE *type);
 STMT *makeSTMT_whileLoop(EXP *exp, STMT_LIST *stmtList);
 STMT *makeSTMT_ifStmt(IFSTMT *ifStmt);
 

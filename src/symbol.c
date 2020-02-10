@@ -123,19 +123,6 @@ void symSTMT(STMT *stmt, SymbolTable *table)
 
             break;
 
-        case k_statementKind_declaration:
-
-            id = stmt->val.declaration.identifier;
-            sym = getSymbol(table, id);
-
-            if (sym != NULL) throwErrorRedeclaredId(stmt->lineno, id);
-            
-            // TODO check if var a : int; is valid!!
-            // this never happens lol
-            // putSymbol(table, id, NULL);
-            if (print_sym_table) printSymbolTableRow(id, table, t_type_exp);
-            break;
-
         case k_statementKind_whileLoop:
 
             t_type_exp = symEXP(stmt->val.whileLoop.exp, table);
