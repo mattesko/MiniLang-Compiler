@@ -28,7 +28,20 @@ gcc -std=c11 -o ${1%.*}.out $FILENAME > /dev/null
 # You MUST replace the following line with the command to execute your compiled code
 # Note the bash replacement which changes:
 #   programs/3-semantics+codegen/valid/test.min -> programs/3-semantics+codegen/valid/test.out
-./${1%.*}.out
+if [[ "$FILENAME" == "programs/3-semantics+codegen/valid/read1.c" ]]
+then
+    ./${1%.*}.out << EOF 
+    True 
+EOF
+elif [[ "$FILENAME" == "programs/3-semantics+codegen/valid/sin_approximate.c" ]]
+then
+    ./${1%.*}.out << EOF 
+    1
+    0.1 
+EOF
+else
+    ./${1%.*}.out
+fi
 
 # Lastly, we propagate the exit code
 exit $?
