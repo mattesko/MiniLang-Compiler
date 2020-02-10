@@ -212,6 +212,7 @@ void genEXP_stringConcat(EXP *left, EXP *right)
 
 void genEXP(EXP *e)
 {
+    char *literal;
     switch (e->kind)
     {
         case k_expressionKind_identifier:
@@ -224,7 +225,9 @@ void genEXP(EXP *e)
             fprintf(targetFile, "%f", e->val.floatLiteral);
             break;
         case k_expressionKind_stringLiteral:
-            fprintf(targetFile, "%s", e->val.stringLiteral);
+            if (strstr(e->val.stringLiteral, "\\") != NULL) literal = str_replace(e->val.stringLiteral, "\\", "\\\\");
+            else literal = e->val.stringLiteral;
+            fprintf(targetFile, "%s", literal);
             break;
         case k_expressionKind_boolLiteral:
             if (e->val.boolLiteral) fprintf(targetFile, "true");
