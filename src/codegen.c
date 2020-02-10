@@ -5,6 +5,9 @@
 #include "codegen.h"
 
 #define SCANF_BUFFSIZE 1024
+#define BUILTIN_CONCAT "__builtin_concat"
+#define BUITLIN_READBOOL "__builtin_readBool"
+#define BUILTIN_PRINTBOOL "__builtin_printBool"
 
 FILE *targetFile;
 int num_tabs_gen = 0;
@@ -20,8 +23,9 @@ char *choosePrintfSpecifier(Type t);
 char *chooseScanfFormat(Type t);
 char *str_replace(char *orig, char *rep, char *with);
 
-void genBuiltIn_readBool();
-void genBuiltIn_concat();
+void genBuiltin_concat();
+void genBuiltin_readBool();
+void genBuiltin_printBool();
 void genSTMT_readBool(char *id);
 
 void genProgram(STMT_LIST *root, char *name)
@@ -38,9 +42,10 @@ void genProgram(STMT_LIST *root, char *name)
         if (root->currentStmt != NULL)
         {
             fprintf(targetFile, headers);
-            genBuiltIn_concat();
-            genBuiltIn_readBool();
-            fprintf(targetFile, "void main()\n{\n");
+            genBuiltin_concat();
+            genBuiltin_readBool();
+            genBuiltin_printBool();
+            fprintf(targetFile, "\nvoid main()\n{\n");
 
             num_tabs_gen++;
             genSTMT(root->currentStmt);
@@ -60,6 +65,18 @@ void genSTMT_LIST(STMT_LIST *s)
         genSTMT(s->currentStmt);
         genSTMT_LIST(s->nextStmtList);
     }
+}
+
+void genSTMT_readBool(char *id)
+{
+    fprintf(targetFile, "%s(&%s);\n", BUITLIN_READBOOL, id);
+}
+
+void genSTMT_printBool(EXP *e)
+{
+    fprintf(targetFile, "%s(", BUILTIN_PRINTBOOL);
+    genEXP(e);
+    fprintf(targetFile, ");\n");
 }
 
 void genSTMT(STMT *s)
@@ -83,10 +100,14 @@ void genSTMT(STMT *s)
 
         case k_statementKind_print:
 
-            specifier = choosePrintfSpecifier(s->val.print.exp->type);
-            fprintf(targetFile, "printf(\"%s\\n\", ", specifier);
-            genEXP(s->val.print.exp);
-            fprintf(targetFile, ");\n");
+            if (s->val.print.exp->type == t_bool) genSTMT_printBool(s->val.print.exp); 
+            else
+            {
+                specifier = choosePrintfSpecifier(s->val.print.exp->type);
+                fprintf(targetFile, "printf(\"%s\\n\", ", specifier);
+                genEXP(s->val.print.exp);
+                fprintf(targetFile, ");\n");
+            }
             break;
 
         case k_statementKind_assignment:
@@ -203,7 +224,7 @@ void genIFSTMT(IFSTMT *s)
 
 void genEXP_stringConcat(EXP *left, EXP *right)
 {
-    fprintf(targetFile, "concat(");
+    fprintf(targetFile, "%s(", BUILTIN_CONCAT);
     genEXP(left);
     fprintf(targetFile, ", ");
     genEXP(right);
@@ -336,28 +357,33 @@ void genTYPE(Type t)
     }
 }
 
-void genBuiltIn_concat()
+void genBuiltin_concat()
 {
-    char *builtin_strcat = 
-    "char *concat(char *str1, char *str2)\n"
+    fprintf(targetFile, "char *%s(char *str1, char *str2)\n", BUILTIN_CONCAT);
+    char *code = 
     "{\n"
     "\tchar *res = malloc(sizeof(str1)+sizeof(str2));\n"
     "\tstrcat(res, str1);\n"
     "\tstrcat(res, str2);\n"
     "\treturn res;\n"
     "}\n";
-    fprintf(targetFile, builtin_strcat);
+    fprintf(targetFile, code);
 }
 
-void genSTMT_readBool(char *id)
+void genBuiltin_printBool()
 {
-    fprintf(targetFile, "_builtIn_readBool(&%s);", id);
+    fprintf(targetFile, "void %s(bool b)\n{\n", BUILTIN_PRINTBOOL);
+    char *code = 
+    "\tif (b) printf(\"%%s\", \"True\");\n"
+    "\telse printf(\"%%s\", \"False\");\n"
+    "}\n";
+    fprintf(targetFile, code);
 }
 
-void genBuiltIn_readBool()
+void genBuiltin_readBool()
 {   
-    char *format = chooseScanfFormat(t_bool); 
-    fprintf(targetFile, "void _builtIn_readBool(bool *b)\n{\n");
+    char *format = chooseScanfFormat(t_bool);
+    fprintf(targetFile, "void %s(bool *b)\n{\n", BUITLIN_READBOOL);
     
     num_tabs_gen++;
     print_tabs_gen();
@@ -377,7 +403,7 @@ void genBuiltIn_readBool()
 
     print_tabs_gen();
     fprintf(targetFile,"free(__bool_str_tmp);\n");
-    fprintf(targetFile, "}\n\n");
+    fprintf(targetFile, "}\n");
     num_tabs_gen--;
 }
 
