@@ -73,15 +73,12 @@ void symSTMT(STMT *stmt, SymbolTable *table)
             sym = getSymbol(table, id);
 
             if (sym == NULL) throwErrorUndefinedId(stmt->lineno, id);
-
-            scanf_format = chooseScanfFormat(sym->type);
-
-            scanf(scanf_format, &read_value);
-            // TODO continue for generated code
+            stmt->val.read.type = sym->type;
             break;
 
         case k_statementKind_print:
-            symEXP(stmt->val.print.exp, table);
+            t_type_exp = symEXP(stmt->val.print.exp, table);
+            stmt->val.print.exp->type = t_type_exp;
             break;
 
         case k_statementKind_assignment:
@@ -121,6 +118,7 @@ void symSTMT(STMT *stmt, SymbolTable *table)
             if (sym != NULL) throwErrorRedeclaredId(stmt->lineno, id);
 
             t_type_exp = symEXP(stmt->val.initLooseType.exp, table);
+            stmt->val.initLooseType.exp->type = t_type_exp;
 
             putSymbol(table, id, t_type_exp, stmt->lineno);
             if (print_sym_table) printSymbolTableRow(id, table, t_type_exp);
@@ -228,6 +226,7 @@ Type symEXP(EXP *exp, SymbolTable *table)
             t_type_right = symEXP(exp->val.binary.right, table);
 
             t_type = resolveBinaryMath(t_type_left, t_type_right, exp->lineno);
+            exp->type = t_type;
             return t_type;
             break;
 
@@ -235,6 +234,7 @@ Type symEXP(EXP *exp, SymbolTable *table)
 
             t_type = symEXP(exp->val.unary, table);
             checkUnaryMinus(t_type, exp->lineno);
+            exp->type = t_type;
             return t_type;
             break;
 
@@ -242,6 +242,7 @@ Type symEXP(EXP *exp, SymbolTable *table)
 
             t_type = symEXP(exp->val.unary, table);
             checkUnaryLogicNot(t_type, exp->lineno);
+            exp->type = t_type;
             return t_type;
             break;
 
@@ -254,6 +255,7 @@ Type symEXP(EXP *exp, SymbolTable *table)
             t_type_left = symEXP(exp->val.binary.left, table);
             t_type_right = symEXP(exp->val.binary.right, table);
             checkBinaryComparison(t_type_left, t_type_right, exp->lineno);
+            exp->type = t_bool;
             return t_bool;
             break;
 
@@ -262,26 +264,34 @@ Type symEXP(EXP *exp, SymbolTable *table)
             t_type_left = symEXP(exp->val.binary.left, table);
             t_type_right = symEXP(exp->val.binary.right, table);
             checkBinaryLogic(t_type_left, t_type_right, exp->lineno);
+            exp->type = t_bool;
             return t_bool;
             break;
+
         case k_expressionKind_withParantheses:
-            return symEXP(exp->val.unary, table);
+            t_type = symEXP(exp->val.unary, table);
+            exp->type = t_type;
+            return t_type;
             break;
 
         // Can directly resolve types from literals
         case k_expressionKind_intLiteral:
+            exp->type = t_int;
             return t_int;
             break;
 
         case k_expressionKind_floatLiteral:
+            exp->type = t_float;
             return t_float;
             break;
 
         case k_expressionKind_stringLiteral:
+            exp->type = t_string;
             return t_string;
             break;
 
         case k_expressionKind_boolLiteral:
+            exp->type = t_bool;
             return t_bool;
             break;
     }

@@ -114,6 +114,7 @@ struct STMT_LIST {
 struct EXP {
     int lineno;
     ExpressionKind kind;
+    Type type;
 
     union {
         char *identifier;
