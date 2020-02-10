@@ -1,8 +1,10 @@
 # Compiler Design
-__Name:__ Matthew Lesko-KRleza
-__Student ID:__ 260692352
+__Name:__ Matthew Lesko-Krleza
+__Student ID:__ 260692352<br>
 ## Assignment 1: Scanner+Parser
 References used: https://github.com/meyerd/flex-bison-example (for more lexing and parsing examples), https://github.com/comp520/Examples/tree/master/flex%2Bbison/scanner%2Bparser, and the bison and flex man pages.<br>
+## Assignment 2: AST, Symbol Table, Typechecking, and Codegen
+References used: I used the JOOS flex+bison implementation https://github.com/comp520/JOOS/tree/master/flex%2Bbison as a reference to see how to create the AST, create the Symbol Table, and to generate code. However, instead of weaving in AST references for each respective symbol in the symbol table, I just stored the type directly into an AST node.<br>
 
 ## Notes
 * `programs`: Test programs are organized by compilation phase and by expected result. Valid programs should output `OK` and status code `0`, while invalid programs should output `Error: <description>` and status code `1`.
