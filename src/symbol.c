@@ -4,8 +4,6 @@
 #include "symbol.h"
 #include "type.h"
 
-#define SCANF_BUFFSIZE 1024
-
 Symbol *putSymbol(SymbolTable *t, char *name, Type type, int lineno);
 Symbol *getSymbol(SymbolTable *t, char *name);
 Symbol *getSymbolFromScope(SymbolTable *t, char *name);
@@ -361,25 +359,6 @@ Symbol *putSymbol(SymbolTable *t, char *name, Type type, int lineno)
     s->next = t->table[hash];
     t->table[hash] = s;
     return s;
-}
-
-char *chooseScanfFormat(Type t_type)
-{
-    switch (t_type)
-    {
-        case t_int:
-            return "%d";
-            break;
-        case t_float:
-            return "%f";
-            break;
-        case t_string:
-            return "%s";
-            break;
-        case t_bool:
-            return "%s"; // TODO change scanned boolean to type bool
-            break;
-    }
 }
 
 void printSymbolTableRow(char *id, SymbolTable *scope, Type t_type)

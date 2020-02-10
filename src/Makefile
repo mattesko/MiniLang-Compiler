@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -lfl
 
-minic: lex.yy.c minic.tab.c minic.tab.h tree.o pretty.o symbol.o type.o main.o
-	$(CC) minic.tab.c lex.yy.c tree.o pretty.o symbol.o type.o main.o -o minic $(CFLAGS)
+minic: lex.yy.c minic.tab.c minic.tab.h tree.o pretty.o symbol.o type.o codegen.o main.o
+	$(CC) minic.tab.c lex.yy.c tree.o pretty.o symbol.o type.o codegen.o main.o -o minic $(CFLAGS)
 
 lex.yy.c: minic.l minic.tab.h
 	flex --header-file=lex.yy.h minic.l
@@ -24,6 +24,9 @@ symbol.o: symbol.c symbol.h
 
 type.o: type.c type.h
 	$(CC) -c type.c type.h
+
+codegen.o: codegen.c codegen.h
+	$(CC) -c codegen.c codegen.h
 
 test_lex: minic
 	echo "1.00+200" | ./minic && echo ""

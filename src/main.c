@@ -2,6 +2,7 @@
 #include <string.h>
 #include "pretty.h"
 #include "symbol.h"
+#include "codegen.h"
 
 extern int print_token;
 extern int print_sym_table;
@@ -15,32 +16,14 @@ char* parse_args(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) {
 
-    char *mode = parse_args(argc, argv);
-    run_mode(mode);
-    return 0;
-}
-
-/* Parse input arguments to retrieve the program's mode
-    Args:
-        int argc: number of arguments
-        char *argv[]: array of arguments
-    Returns:
-        char *: mode to run compiler in
-*/
-char* parse_args(int argc, char *argv[]) {
-    if (argc == 2) {
-        return argv[1];
+    char *mode;
+    if (argc == 2 || argc == 3) {
+        mode = argv[1];
     }
     else {
-        fprintf(stderr, "Error: Incorrect number of arguments");
+        fprintf(stderr, "Error: incorrect number of arguments");
     }
-}
-
-/* Run the compiler in a given mode
-    Args:
-        char *mode: mode to run the compiler in
-*/
-void run_mode(char *mode) {
+    
     if (strcmp(mode, "scan") == 0) {
         print_token = 0;
         while(yylex());
@@ -67,11 +50,18 @@ void run_mode(char *mode) {
     }
     else if (strcmp(mode, "typecheck") == 0) {
         yyparse();
-        print_sym_table = 0;
         makeSymbolTable(root);
         printf("OK\n");
     }
-    else {
-        printf("No such mode '%s' supported", mode);
+    else if (strcmp(mode, "codegen") == 0) {
+        yyparse();
+        makeSymbolTable(root);
+        genProgram(root, argv[2]);
+        printf("OK\n");
     }
+    else {
+        fprintf(stderr, "Error: no such mode '%s' supported", mode);
+    }
+
+    return 0;
 }
