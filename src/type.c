@@ -17,7 +17,7 @@ void checkAssignment(Type t_type_left, Type t_type_right, int lineno)
     else if (t_type_left != t_type_right)
     {
         fprintf(stderr, "Error: (line %d) cannot assign type '%s' to type '%s'\n", lineno, type_right, type_left);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     // else if (t_type_left)
     // else
@@ -32,7 +32,7 @@ void checkIsBool(Type t_type, int lineno)
     if (t_type != t_bool)
     {
         fprintf(stderr, "Error: (line %d) expecting type 'bool', got type '%s' instead\n", lineno, str);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -55,7 +55,7 @@ Type resolveBinaryMath(Type t_type_left, Type t_type_right, int lineno)
     else 
     {
         fprintf(stderr, "Error: (line %d) cannot express a binary Mathematical expression with a pair of types '%s' and '%s'\n", lineno, typeToString(t_type_left), typeToString(t_type_right));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -64,7 +64,7 @@ void checkUnaryMinus(Type t_type, int lineno)
     if (t_type != t_int && t_type != t_float)
     {
         fprintf(stderr, "Error: (line %d) cannot express type '%s' with '-' operator\n", lineno, typeToString(t_type));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -73,7 +73,7 @@ void checkUnaryLogicNot(Type t_type, int lineno)
     if (t_type != t_bool)
     {
         fprintf(stderr, "Error: (line %d) cannot express type '%s' with '!' operator\n", lineno, typeToString(t_type));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -84,7 +84,7 @@ void checkBinaryComparison(Type t_type_left, Type t_type_right, int lineno)
         (t_type_left == t_float && t_type_right == t_int)))
     {
         fprintf(stderr, "Error: (line %d) cannot express a binary comparison with a pair of types '%s' and '%s'\n", lineno, typeToString(t_type_left), typeToString(t_type_right));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -93,6 +93,6 @@ void checkBinaryLogic(Type t_type_left, Type t_type_right, int lineno)
     if (t_type_left != t_bool && t_type_right != t_bool)
     {
         fprintf(stderr, "Error: (line %d) cannot express a binary logic expression with a pair of types '%s' and '%s'\n", lineno, typeToString(t_type_left), typeToString(t_type_right));
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
