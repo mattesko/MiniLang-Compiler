@@ -231,6 +231,31 @@ void genEXP_stringConcat(EXP *left, EXP *right)
     fprintf(targetFile, ")");
 }
 
+void genEXP_binaryComparison(EXP *left, EXP *right, char *op)
+{
+    if (left->type == t_string && right->type == t_string)
+    {   
+        fprintf(targetFile, "strcmp(");
+        genEXP(left);
+        fprintf(targetFile, ", ");
+        genEXP(right);
+        fprintf(targetFile, ")");
+
+        if (strcmp(op, "==") == 0) fprintf(targetFile, " == 0");
+        else if (strcmp(op, ">=") == 0) fprintf(targetFile, " >= 0");
+        else if (strcmp(op, "<=") == 0) fprintf(targetFile, " <= 0");
+        else if (strcmp(op, ">") == 0) fprintf(targetFile, " > 0");
+        else if (strcmp(op, "<") == 0) fprintf(targetFile, " < 0");
+        else if (strcmp(op, "!=") == 0) fprintf(targetFile, " != 0");
+    }
+    else
+    {   
+        genEXP(left);
+        fprintf(targetFile, " %s ", op);
+        genEXP(right);
+    }
+}
+
 void genEXP(EXP *e)
 {
     char *literal;
@@ -291,34 +316,22 @@ void genEXP(EXP *e)
             genEXP(e->val.unary);
             break;
         case k_expressionKind_equal:
-            genEXP(e->val.binary.left);
-            fprintf(targetFile, " == ");
-            genEXP(e->val.binary.right);
+            genEXP_binaryComparison(e->val.binary.left, e->val.binary.right, "==");
             break;
         case k_expressionKind_notEqual:
-            genEXP(e->val.binary.left);
-            fprintf(targetFile, " != ");
-            genEXP(e->val.binary.right);
+            genEXP_binaryComparison(e->val.binary.left, e->val.binary.right, "!=");
             break;
         case k_expressionKind_GT:
-            genEXP(e->val.binary.left);
-            fprintf(targetFile, " > ");
-            genEXP(e->val.binary.right);
+            genEXP_binaryComparison(e->val.binary.left, e->val.binary.right, ">");
             break;
         case k_expressionKind_GTE:
-            genEXP(e->val.binary.left);
-            fprintf(targetFile, " >= ");
-            genEXP(e->val.binary.right);
+            genEXP_binaryComparison(e->val.binary.left, e->val.binary.right, ">=");
             break;
         case k_expressionKind_ST:
-            genEXP(e->val.binary.left);
-            fprintf(targetFile, " < ");
-            genEXP(e->val.binary.right);
+            genEXP_binaryComparison(e->val.binary.left, e->val.binary.right, "<");
             break;
         case k_expressionKind_STE:
-            genEXP(e->val.binary.left);
-            fprintf(targetFile, " <= ");
-            genEXP(e->val.binary.right);
+            genEXP_binaryComparison(e->val.binary.left, e->val.binary.right, "<=");
             break;
         case k_expressionKind_logicOr:
             genEXP(e->val.binary.left);

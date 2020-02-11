@@ -240,6 +240,8 @@ Type symEXP(EXP *exp, SymbolTable *table)
             t_type_left = symEXP(exp->val.binary.left, table);
             t_type_right = symEXP(exp->val.binary.right, table);
             checkBinaryComparison(t_type_left, t_type_right, exp->lineno);
+            exp->val.binary.left->type = t_type_left;
+            exp->val.binary.right->type = t_type_right;
             exp->type = t_bool;
             return t_bool;
             break;
@@ -249,6 +251,8 @@ Type symEXP(EXP *exp, SymbolTable *table)
             t_type_left = symEXP(exp->val.binary.left, table);
             t_type_right = symEXP(exp->val.binary.right, table);
             checkBinaryLogic(t_type_left, t_type_right, exp->lineno);
+            exp->val.binary.left->type = t_type_left;
+            exp->val.binary.right->type = t_type_right;
             exp->type = t_bool;
             return t_bool;
             break;
