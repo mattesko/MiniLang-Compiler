@@ -10,4 +10,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run valid and invalid program scanner and parser tests
-      run: sudo apt-get install bison -y && ./build.sh && ./test.sh
+      run: sudo apt-get install flex -y && sudo apt-get install bison -y && ./build.sh && ./test.sh
